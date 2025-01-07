@@ -9,7 +9,9 @@ interface SectionTitleProps {
 
 export default function SectionTitle({ title, subtitle }: SectionTitleProps) {
   return (
-    <div className="relative mb-20 overflow-hidden"> {/* Added overflow-hidden */}
+    <div className="relative mb-20 overflow-hidden">
+      {' '}
+      {/* Added overflow-hidden */}
       {/* Large Background Title */}
       <motion.h2
         initial={{ opacity: 0, scale: 0.9 }}
@@ -21,7 +23,6 @@ export default function SectionTitle({ title, subtitle }: SectionTitleProps) {
       >
         {title}
       </motion.h2>
-
       {/* Main Title */}
       <motion.h3
         initial={{ opacity: 0, y: 20 }}
@@ -31,7 +32,6 @@ export default function SectionTitle({ title, subtitle }: SectionTitleProps) {
       >
         {title}
       </motion.h3>
-
       {/* Subtitle if provided */}
       {subtitle && (
         <motion.p

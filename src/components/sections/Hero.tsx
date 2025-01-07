@@ -36,13 +36,13 @@ export default function Hero() {
         <div className="absolute inset-0 bg-[#1a191d]" />
         <div className="absolute top-0 left-0 w-1/3 h-1/3 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-0 right-0 w-1/3 h-1/3 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-        <div 
+        <div
           className="absolute inset-0 transition-all duration-150"
-          style={{ 
+          style={{
             backdropFilter: `blur(${blur}px)`,
             WebkitBackdropFilter: `blur(${blur}px)`,
-            backgroundColor: `rgba(0, 0, 0, ${Math.min(scrollProgress * 0.6, 0.6)})`,
-          }} 
+            backgroundColor: `rgba(0, 0, 0, ${Math.min(scrollProgress * 0.6, 0.6)})`
+          }}
         />
       </div>
 
@@ -59,7 +59,7 @@ export default function Hero() {
             >
               The Mind Behind
             </motion.h1>
-            
+
             {/* Second Line with Image */}
             <div className="flex items-center gap-2 md:gap-4">
               <motion.h2
@@ -77,7 +77,7 @@ export default function Hero() {
                 className="relative w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-24 lg:h-24 overflow-hidden hidden md:block"
               >
                 <Image
-                  src={profile?.heroImage1?.url || "/assets/profile-small.jpg"}
+                  src={profile?.heroImage1?.url || '/assets/profile-small.jpg'}
                   alt={`${profile?.fullName || 'Developer'} Setup`}
                   fill
                   className="object-cover brightness-75 rounded-3xl"
@@ -94,8 +94,8 @@ export default function Hero() {
                 className="relative w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-24 lg:h-24 overflow-hidden hidden md:block"
               >
                 <Image
-                  src={profile?.heroImage2?.url || "/assets/profile-small.jpg"}
-                  alt={profile?.fullName || "Developer"}
+                  src={profile?.heroImage2?.url || '/assets/profile-small.jpg'}
+                  alt={profile?.fullName || 'Developer'}
                   fill
                   className="object-cover brightness-75 rounded-3xl"
                 />

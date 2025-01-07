@@ -10,9 +10,14 @@ export default function ThreeBackground() {
     if (!containerRef.current) return;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    
+
     renderer.setSize(window.innerWidth, window.innerHeight);
     containerRef.current.appendChild(renderer.domElement);
 
@@ -22,7 +27,7 @@ export default function ThreeBackground() {
       transparent: true,
       opacity: 0.2,
       roughness: 0.5,
-      metalness: 0.8,
+      metalness: 0.8
     });
     const torus = new THREE.Mesh(geometry, material);
     scene.add(torus);
@@ -37,13 +42,13 @@ export default function ThreeBackground() {
     camera.position.z = 5;
 
     let animationFrameId: number;
-    
+
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
 
       torus.rotation.x += 0.001;
       torus.rotation.y += 0.002;
-      
+
       torus.position.y = Math.sin(Date.now() * 0.001) * 0.2;
 
       renderer.render(scene, camera);
@@ -74,10 +79,6 @@ export default function ThreeBackground() {
   }, []);
 
   return (
-    <div 
-      ref={containerRef} 
-      className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: -1 }}
-    />
+    <div ref={containerRef} className="fixed inset-0 pointer-events-none" style={{ zIndex: -1 }} />
   );
 }

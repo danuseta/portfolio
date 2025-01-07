@@ -26,7 +26,7 @@ export default function LoadingScreen() {
         <div className="w-16 h-16 relative">
           <motion.div
             animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
             className="absolute inset-0 border-t-2 border-purple-400 rounded-full"
           />
           <motion.div
@@ -35,9 +35,7 @@ export default function LoadingScreen() {
             transition={{ duration: 0.5 }}
             className="absolute inset-0 flex items-center justify-center"
           >
-            <span className="text-xl font-bold">
-              DS
-            </span>
+            <span className="text-xl font-bold">DS</span>
           </motion.div>
         </div>
       </motion.div>

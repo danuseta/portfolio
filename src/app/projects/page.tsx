@@ -13,16 +13,35 @@ import Image from 'next/image';
 
 const getMonthNumber = (month: string): number => {
   const monthMap: { [key: string]: number } = {
-    'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
-    'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11,
-    'January': 0, 'February': 1, 'March': 2, 'April': 3, 'June': 5,
-    'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11
+    Jan: 0,
+    Feb: 1,
+    Mar: 2,
+    Apr: 3,
+    May: 4,
+    Jun: 5,
+    Jul: 6,
+    Aug: 7,
+    Sep: 8,
+    Oct: 9,
+    Nov: 10,
+    Dec: 11,
+    January: 0,
+    February: 1,
+    March: 2,
+    April: 3,
+    June: 5,
+    July: 6,
+    August: 7,
+    September: 8,
+    October: 9,
+    November: 10,
+    December: 11
   };
   return monthMap[month] || 0;
 };
 
 const getStartDateFromPeriod = (period: string): Date => {
-  const dates = period.split('-').map(d => d.trim());
+  const dates = period.split('-').map((d) => d.trim());
   const startDate = dates[0];
   const [month, year] = startDate.split(' ');
   return new Date(parseInt(year), getMonthNumber(month));
@@ -110,8 +129,12 @@ export default function ProjectsPage() {
           </Link>
 
           <div className="mb-8 md:mb-12">
-            <h1 className="text-2xl md:text-4xl font-bold mb-2 md:mb-3 text-purple-400">All Projects</h1>
-            <p className="text-gray-300 tracking-wide text-sm md:text-base">Explore all my projects and works</p>
+            <h1 className="text-2xl md:text-4xl font-bold mb-2 md:mb-3 text-purple-400">
+              All Projects
+            </h1>
+            <p className="text-gray-300 tracking-wide text-sm md:text-base">
+              Explore all my projects and works
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
@@ -120,44 +143,46 @@ export default function ProjectsPage() {
                 key={project._id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ 
+                transition={{
                   duration: 0.6,
-                  ease: "easeOut",
-                  delay: index * 0.1 
+                  ease: 'easeOut',
+                  delay: index * 0.1
                 }}
                 className="group relative bg-white/5 backdrop-blur-lg rounded-lg md:rounded-xl overflow-hidden
                           hover:bg-white/10 transition-all duration-700 h-full"
               >
                 {/* Project Image/Preview */}
                 <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-purple-500/10 to-blue-500/10">
-  {project.image && (
-    <>
-      <div className="relative w-full h-full">
-        <Image
-          src={project.image.url}
-          alt={project.title}
-          fill
-          className="object-cover transform group-hover:scale-110 transition-transform duration-500"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-        />
-      </div>
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        onClick={() => setSelectedImage(project.image.url)}
-        className="absolute top-2 right-2 md:top-3 md:right-3 p-2 rounded-full bg-black/50 text-white 
+                  {project.image && (
+                    <>
+                      <div className="relative w-full h-full">
+                        <Image
+                          src={project.image.url}
+                          alt={project.title}
+                          fill
+                          className="object-cover transform group-hover:scale-110 transition-transform duration-500"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                        />
+                      </div>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        onClick={() => setSelectedImage(project.image.url)}
+                        className="absolute top-2 right-2 md:top-3 md:right-3 p-2 rounded-full bg-black/50 text-white 
                   hover:bg-black/70 transition-all z-10"
-      >
-        <ImageIcon className="w-3 h-3 md:w-4 md:h-4" />
-      </motion.button>
-    </>
-  )}
-  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-</div>
+                      >
+                        <ImageIcon className="w-3 h-3 md:w-4 md:h-4" />
+                      </motion.button>
+                    </>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                </div>
 
                 {/* Content */}
                 <div className="p-4 md:p-6 relative">
-                  <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3 text-purple-400 group-hover:text-purple-200
-                               transition-colors tracking-wide line-clamp-1">
+                  <h3
+                    className="text-lg md:text-xl font-bold mb-2 md:mb-3 text-purple-400 group-hover:text-purple-200
+                               transition-colors tracking-wide line-clamp-1"
+                  >
                     {project.title}
                   </h3>
 
@@ -165,7 +190,7 @@ export default function ProjectsPage() {
                     {project.description}
                   </p>
 
-                  <TechStack 
+                  <TechStack
                     technologies={project.technologies}
                     size="sm"
                     className="mb-3 md:mb-4 gap-1.5"
@@ -198,8 +223,10 @@ export default function ProjectsPage() {
                 </div>
 
                 {/* Hover Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-transparent to-blue-500/10 
-                             opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-transparent to-blue-500/10 
+                             opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                />
               </motion.div>
             ))}
           </div>
@@ -208,33 +235,33 @@ export default function ProjectsPage() {
 
       {/* Image Preview Modal */}
       {selectedImage && (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-    onClick={() => setSelectedImage(null)}
-  >
-    <motion.div
-      initial={{ scale: 0.9 }}
-      animate={{ scale: 1 }}
-      exit={{ scale: 0.9 }}
-      className="relative max-w-4xl w-full max-h-[90vh] rounded-xl overflow-hidden"
-      onClick={e => e.stopPropagation()}
-    >
-      <div className="relative w-full h-[80vh]">
-        <Image
-          src={selectedImage}
-          alt="Project Preview"
-          fill
-          className="object-contain"
-          sizes="100vw"
-          priority
-        />
-      </div>
-    </motion.div>
-  </motion.div>
-)}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <motion.div
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0.9 }}
+            className="relative max-w-4xl w-full max-h-[90vh] rounded-xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative w-full h-[80vh]">
+              <Image
+                src={selectedImage}
+                alt="Project Preview"
+                fill
+                className="object-contain"
+                sizes="100vw"
+                priority
+              />
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
     </motion.div>
   );
 }

@@ -22,7 +22,7 @@ export function useScrollAnimations() {
     const sections = document.querySelectorAll('section[id]');
     const scrollPosition = window.scrollY + window.innerHeight / 3;
 
-    sections.forEach(section => {
+    sections.forEach((section) => {
       const sectionTop = (section as HTMLElement).offsetTop;
       const sectionHeight = section.clientHeight;
       const sectionId = section.getAttribute('id') || '';
@@ -31,7 +31,7 @@ export function useScrollAnimations() {
         if (activeSection !== sectionId) {
           setActiveSection(sectionId);
           const navLinks = document.querySelectorAll('.nav-link');
-          navLinks.forEach(link => {
+          navLinks.forEach((link) => {
             link.classList.remove('active');
             if (link.getAttribute('href') === `#${sectionId}`) {
               link.classList.add('active');
@@ -46,7 +46,7 @@ export function useScrollAnimations() {
     const element = document.getElementById(sectionId);
     if (element) {
       const navbar = document.querySelector('nav');
-      const offset = navbar ? navbar.clientHeight + 32 : 80; 
+      const offset = navbar ? navbar.clientHeight + 32 : 80;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
 
@@ -72,4 +72,3 @@ export function useScrollAnimations() {
     scrollToSection
   };
 }
-

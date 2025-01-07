@@ -4,10 +4,7 @@ interface UseDataOptions {
   onError?: (error: Error) => void;
 }
 
-export function useData<T>(
-  fetchFn: () => Promise<T>,
-  options: UseDataOptions = {}
-) {
+export function useData<T>(fetchFn: () => Promise<T>, options: UseDataOptions = {}) {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);

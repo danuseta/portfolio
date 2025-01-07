@@ -14,17 +14,21 @@ const icons = {
   about: FileCode2,
   experience: Briefcase,
   education: GraduationCap,
-  projects: Code,
+  projects: Code
 };
 
 const sectionColors = {
   about: 'from-purple-500 to-blue-500',
   experience: 'from-blue-500 to-cyan-500',
   education: 'from-cyan-500 to-green-500',
-  projects: 'from-green-500 to-purple-500',
+  projects: 'from-green-500 to-purple-500'
 };
 
-export default function SectionDivider({ type, lottieAnimation, showScrollIndicator = false }: SectionDividerProps) {
+export default function SectionDivider({
+  type,
+  lottieAnimation,
+  showScrollIndicator = false
+}: SectionDividerProps) {
   const Icon = icons[type];
   const gradientColor = sectionColors[type];
 
@@ -41,7 +45,7 @@ export default function SectionDivider({ type, lottieAnimation, showScrollIndica
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 1, ease: "easeInOut" }}
+            transition={{ duration: 1, ease: 'easeInOut' }}
             className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-px bg-gradient-to-r 
                      from-transparent via-purple-500 to-transparent opacity-50"
           />
@@ -51,7 +55,7 @@ export default function SectionDivider({ type, lottieAnimation, showScrollIndica
             initial={{ scale: 0, rotate: -180 }}
             whileInView={{ scale: 1, rotate: 0 }}
             viewport={{ once: true }}
-            transition={{ type: "spring", duration: 1.5, bounce: 0.4 }}
+            transition={{ type: 'spring', duration: 1.5, bounce: 0.4 }}
             className="relative z-10 w-20 h-20 mx-auto bg-dark rounded-full 
                      flex items-center justify-center border border-purple-500/20
                      shadow-lg shadow-purple-500/10"
@@ -70,8 +74,10 @@ export default function SectionDivider({ type, lottieAnimation, showScrollIndica
                 className={`p-4 rounded-full bg-gradient-to-br ${gradientColor}
                          flex items-center justify-center group`}
               >
-                <Icon className="w-8 h-8 text-white transition-transform 
-                             group-hover:scale-110 group-hover:rotate-12" />
+                <Icon
+                  className="w-8 h-8 text-white transition-transform 
+                             group-hover:scale-110 group-hover:rotate-12"
+                />
               </motion.div>
             )}
           </motion.div>
@@ -90,12 +96,12 @@ export default function SectionDivider({ type, lottieAnimation, showScrollIndica
                     top: '50%',
                     transform: 'translate(-50%, -50%)'
                   }}
-                  initial={{ 
+                  initial={{
                     y: -20,
                     opacity: 0,
                     scale: 0.5
                   }}
-                  animate={{ 
+                  animate={{
                     y: [-10, 10],
                     opacity: [0, 1, 0],
                     scale: [0.5, 1, 0.5]
@@ -103,8 +109,8 @@ export default function SectionDivider({ type, lottieAnimation, showScrollIndica
                   transition={{
                     duration: 2 + i * 0.2,
                     repeat: Infinity,
-                    repeatType: "reverse",
-                    ease: "easeInOut"
+                    repeatType: 'reverse',
+                    ease: 'easeInOut'
                   }}
                 />
               ))}
@@ -115,7 +121,7 @@ export default function SectionDivider({ type, lottieAnimation, showScrollIndica
               <motion.div
                 key={`sparkle-${i}`}
                 className="absolute top-1/2"
-                style={{ 
+                style={{
                   [i === 0 ? 'left' : 'right']: '20%',
                   transform: 'translate(-50%, -50%)'
                 }}
@@ -134,10 +140,7 @@ export default function SectionDivider({ type, lottieAnimation, showScrollIndica
             transition={{ delay: 1 }}
             className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center"
           >
-            <motion.div
-              animate={{ y: [0, 5, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
+            <motion.div animate={{ y: [0, 5, 0] }} transition={{ duration: 2, repeat: Infinity }}>
               <ChevronDown className="w-6 h-6 text-purple-500 opacity-50" />
             </motion.div>
           </motion.div>

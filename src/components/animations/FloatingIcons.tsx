@@ -11,7 +11,7 @@ export default function FloatingIcons() {
     { Icon: Sparkles, delay: 0.6 },
     { Icon: Triangle, delay: 0.8 },
     { Icon: Circle, delay: 1 },
-    { Icon: Square, delay: 1.2 },
+    { Icon: Square, delay: 1.2 }
   ];
 
   return (
@@ -20,7 +20,7 @@ export default function FloatingIcons() {
         <motion.div
           key={index}
           initial={{ opacity: 0, y: 100 }}
-          animate={{ 
+          animate={{
             opacity: [0, 1, 0],
             y: [-50, -150, -250],
             x: Math.sin(index) * 100
@@ -29,7 +29,7 @@ export default function FloatingIcons() {
             duration: 10,
             delay: delay,
             repeat: Infinity,
-            repeatType: "reverse"
+            repeatType: 'reverse'
           }}
           className="absolute"
           style={{
@@ -37,8 +37,8 @@ export default function FloatingIcons() {
             bottom: '0%'
           }}
         >
-          <Icon 
-            className="w-8 h-8 text-purple-500/20" 
+          <Icon
+            className="w-8 h-8 text-purple-500/20"
             style={{ transform: `rotate(${index * 45}deg)` }}
           />
         </motion.div>

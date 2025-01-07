@@ -33,12 +33,7 @@ export default function AnimatedDivider({ title, animationUrl }: AnimatedDivider
 
       {/* Lottie Animation */}
       <div className="w-32 h-32 mx-auto">
-        <Player
-          autoplay
-          loop
-          src={animationUrl}
-          style={{ height: '100%', width: '100%' }}
-        />
+        <Player autoplay loop src={animationUrl} style={{ height: '100%', width: '100%' }} />
       </div>
 
       {/* Decorative Lines */}

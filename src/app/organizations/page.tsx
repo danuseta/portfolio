@@ -11,16 +11,35 @@ import type { Organization } from '@/src/lib/api/types';
 
 const getMonthNumber = (month: string): number => {
   const monthMap: { [key: string]: number } = {
-    'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
-    'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11,
-    'January': 0, 'February': 1, 'March': 2, 'April': 3, 'June': 5,
-    'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11
+    Jan: 0,
+    Feb: 1,
+    Mar: 2,
+    Apr: 3,
+    May: 4,
+    Jun: 5,
+    Jul: 6,
+    Aug: 7,
+    Sep: 8,
+    Oct: 9,
+    Nov: 10,
+    Dec: 11,
+    January: 0,
+    February: 1,
+    March: 2,
+    April: 3,
+    June: 5,
+    July: 6,
+    August: 7,
+    September: 8,
+    October: 9,
+    November: 10,
+    December: 11
   };
   return monthMap[month] || 0;
 };
 
 const getStartDateFromPeriod = (period: string): Date => {
-  const dates = period.split('-').map(d => d.trim());
+  const dates = period.split('-').map((d) => d.trim());
   const startDate = dates[0];
   const [month, year] = startDate.split(' ');
   return new Date(parseInt(year), getMonthNumber(month));
@@ -107,8 +126,12 @@ export default function OrganizationsPage() {
           </Link>
 
           <div className="mb-8 md:mb-12">
-            <h1 className="text-2xl md:text-4xl font-bold mb-2 md:mb-3 text-purple-400">Organizations</h1>
-            <p className="text-gray-300 tracking-wide text-sm md:text-base">My involvement in various organizations and communities</p>
+            <h1 className="text-2xl md:text-4xl font-bold mb-2 md:mb-3 text-purple-400">
+              Organizations
+            </h1>
+            <p className="text-gray-300 tracking-wide text-sm md:text-base">
+              My involvement in various organizations and communities
+            </p>
           </div>
 
           <div className="space-y-8 md:space-y-16">
@@ -120,20 +143,30 @@ export default function OrganizationsPage() {
                 transition={{ duration: 0.5, delay: index * 0.2 }}
                 className="group"
               >
-                <div className="bg-white/5 backdrop-blur-lg rounded-xl md:rounded-2xl p-4 md:p-8 relative overflow-hidden
-                              hover:bg-white/10 transition-all duration-500">
+                <div
+                  className="bg-white/5 backdrop-blur-lg rounded-xl md:rounded-2xl p-4 md:p-8 relative overflow-hidden
+                              hover:bg-white/10 transition-all duration-500"
+                >
                   {/* Background Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-transparent to-blue-500/10 
-                                opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
+                  <div
+                    className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-transparent to-blue-500/10 
+                                opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  />
+
                   {/* Content */}
                   <div className="relative z-10">
                     <div className="flex flex-col gap-4 mb-4 md:mb-6">
                       {/* Organization Info */}
                       <div>
-                        <h3 className="text-lg md:text-2xl font-bold mb-1 md:mb-2 text-purple-400 group-hover:text-purple-200
-                                     transition-colors tracking-wide">{org.role}</h3>
-                        <p className="text-base md:text-lg text-gray-300 tracking-wide">{org.name}</p>
+                        <h3
+                          className="text-lg md:text-2xl font-bold mb-1 md:mb-2 text-purple-400 group-hover:text-purple-200
+                                     transition-colors tracking-wide"
+                        >
+                          {org.role}
+                        </h3>
+                        <p className="text-base md:text-lg text-gray-300 tracking-wide">
+                          {org.name}
+                        </p>
                       </div>
 
                       {/* Period and Location */}
@@ -160,7 +193,9 @@ export default function OrganizationsPage() {
                           className="flex items-start gap-2 md:gap-3"
                         >
                           <span className="text-purple-400 shrink-0 mt-1.5">•</span>
-                          <span className="text-gray-300 text-justify tracking-wide text-sm md:text-base">{highlight}</span>
+                          <span className="text-gray-300 text-justify tracking-wide text-sm md:text-base">
+                            {highlight}
+                          </span>
                         </motion.li>
                       ))}
                     </ul>

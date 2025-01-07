@@ -16,7 +16,7 @@ export default function Feedback() {
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value
     }));
@@ -43,22 +43,22 @@ export default function Feedback() {
     visible: {
       transition: {
         delayChildren: 0.2,
-        staggerChildren: 0.1,
+        staggerChildren: 0.1
       }
     }
   };
 
   const itemVariants = {
-    hidden: { 
+    hidden: {
       opacity: 0,
-      y: 20,
+      y: 20
     },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
+        ease: 'easeOut'
       }
     }
   };
@@ -70,32 +70,30 @@ export default function Feedback() {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: '-100px' }}
           variants={containerVariants}
         >
           <motion.div variants={itemVariants}>
-            <SectionTitle 
-              title="Feedback" 
-              subtitle="Share your thoughts to help me improve"
-            />
+            <SectionTitle title="Feedback" subtitle="Share your thoughts to help me improve" />
           </motion.div>
 
-          <motion.div 
-            variants={containerVariants}
-            className="max-w-2xl mx-auto"
-          >
+          <motion.div variants={containerVariants} className="max-w-2xl mx-auto">
             <motion.div
               variants={itemVariants}
               className="bg-white/5 backdrop-blur-lg rounded-xl md:rounded-2xl p-4 md:p-8 relative overflow-hidden
                         hover:bg-white/10 transition-all duration-500"
             >
               {/* Background Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-transparent to-blue-500/10 
-                            opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div
+                className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-transparent to-blue-500/10 
+                            opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              />
 
               <form onSubmit={handleSubmit} className="relative z-10 space-y-4 md:space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1.5 md:mb-2">Name</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1.5 md:mb-2">
+                    Name
+                  </label>
                   <input
                     type="text"
                     name="name"
@@ -111,7 +109,9 @@ export default function Feedback() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1.5 md:mb-2">Email</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1.5 md:mb-2">
+                    Email
+                  </label>
                   <input
                     type="email"
                     name="email"
@@ -127,7 +127,9 @@ export default function Feedback() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1.5 md:mb-2">Message</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1.5 md:mb-2">
+                    Message
+                  </label>
                   <textarea
                     name="message"
                     required
@@ -146,10 +148,10 @@ export default function Feedback() {
                   <motion.button
                     type="submit"
                     disabled={loading}
-                    whileHover={{ 
+                    whileHover={{
                       scale: 1.02,
                       x: 5,
-                      backgroundColor: "rgba(255, 255, 255, 0.1)"
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)'
                     }}
                     whileTap={{ scale: 0.95 }}
                     className="flex items-center gap-2 text-purple-400 hover:text-purple-300 
@@ -185,7 +187,7 @@ export default function Feedback() {
             transition={{
               duration: 4,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: 'easeInOut'
             }}
             className="absolute -right-10 top-1/4 w-24 md:w-32 h-24 md:h-32 bg-purple-500/10 rounded-full blur-3xl"
           />
@@ -197,7 +199,7 @@ export default function Feedback() {
             transition={{
               duration: 5,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: 'easeInOut'
             }}
             className="absolute -left-10 bottom-1/4 w-32 md:w-40 h-32 md:h-40 bg-blue-500/10 rounded-full blur-3xl"
           />

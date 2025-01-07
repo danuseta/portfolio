@@ -17,7 +17,8 @@ import type { Profile } from '@/src/lib/api/types';
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const { blur, heroOpacity, contentOpacity, contentY, scrollIndicatorOpacity } = useScrollAnimations();
+  const { blur, heroOpacity, contentOpacity, contentY, scrollIndicatorOpacity } =
+    useScrollAnimations();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -46,10 +47,10 @@ export default function Home() {
       </div>
 
       {/* Fixed Hero */}
-      <motion.div 
+      <motion.div
         id="home"
         className="fixed inset-0 z-10"
-        style={{ 
+        style={{
           filter: blur,
           opacity: heroOpacity
         }}
@@ -61,11 +62,11 @@ export default function Home() {
       <div className="relative">
         {/* Spacer for scroll */}
         <div className="h-screen" />
-        
+
         {/* Content Sections */}
         <motion.div
           className="relative z-20 bg-transparent"
-          style={{ 
+          style={{
             opacity: contentOpacity,
             y: contentY
           }}
@@ -89,49 +90,69 @@ export default function Home() {
                       <h2 className="text-3xl font-bold text-purple-400 mb-2 tracking-wide">
                         {profile?.fullName}
                       </h2>
-                      <p className="text-xl text-purple-400 tracking-wide">
-                        {profile?.role}
-                      </p>
+                      <p className="text-xl text-purple-400 tracking-wide">{profile?.role}</p>
                     </div>
                   </div>
                   <p className="text-gray-300 leading-relaxed text-justify mb-6">
                     {profile?.shortBio}
                   </p>
-                  
+
                   {/* Buttons Container */}
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <motion.a
                       href={profile?.cvLink || '#'}
                       target="_blank"
                       rel="noopener noreferrer"
-                      whileHover={{ 
+                      whileHover={{
                         scale: 1.02,
                         x: 5,
-                        backgroundColor: "rgba(255, 255, 255, 0.1)"
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)'
                       }}
                       whileTap={{ scale: 0.95 }}
                       className="w-full sm:w-auto flex items-center justify-center gap-2 text-purple-400 hover:text-purple-300 
                                bg-white/5 backdrop-blur-sm px-6 py-3 rounded-full transition-colors"
                     >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                        />
                       </svg>
                       <span className="font-semibold tracking-wide">Download CV</span>
                     </motion.a>
 
                     <Link href="/certificates" className="w-full sm:w-auto">
                       <motion.button
-                        whileHover={{ 
+                        whileHover={{
                           scale: 1.02,
                           x: 5,
-                          backgroundColor: "rgba(255, 255, 255, 0.1)"
+                          backgroundColor: 'rgba(255, 255, 255, 0.1)'
                         }}
                         whileTap={{ scale: 0.95 }}
                         className="w-full flex items-center justify-center gap-2 text-purple-400 hover:text-purple-300 
                                  bg-white/5 backdrop-blur-sm px-6 py-3 rounded-full transition-colors"
                       >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
                         </svg>
                         <span className="font-semibold tracking-wide">View Certificates</span>
                       </motion.button>
@@ -154,8 +175,8 @@ export default function Home() {
             <section id="feedback" className="mb-2">
               {/* <div className="container mx-auto px-4">
                 <div className="max-w-4xl mx-auto bg-white/5 backdrop-blur-lg rounded-2xl p-8"> */}
-                  <Feedback />
-                {/* </div>
+              <Feedback />
+              {/* </div>
               </div> */}
             </section>
           </div>

@@ -31,8 +31,10 @@ export default function ExperienceCard({
                  hover:bg-white/10 dark:hover:bg-white/10"
     >
       {/* Background Gradient Effect */}
-      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 opacity-0 
-                    group-hover:opacity-100 transition-opacity duration-300" />
+      <div
+        className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 opacity-0 
+                    group-hover:opacity-100 transition-opacity duration-300"
+      />
 
       {/* Content */}
       <div className="relative z-10">

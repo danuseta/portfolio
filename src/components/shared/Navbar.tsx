@@ -17,10 +17,7 @@ export default function Navbar() {
       >
         <nav className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link href="/" className="text-2xl font-bold">
                 DS
               </Link>

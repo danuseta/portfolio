@@ -21,10 +21,7 @@ export default function SkillBadge({ name, icon, level = 0 }: SkillBadgeProps) {
       <span>{name}</span>
       {level > 0 && (
         <div className="w-16 h-1 bg-purple-900/20 rounded-full ml-2">
-          <div 
-            className="h-full bg-purple-400 rounded-full" 
-            style={{ width: `${level}%` }}
-          />
+          <div className="h-full bg-purple-400 rounded-full" style={{ width: `${level}%` }} />
         </div>
       )}
     </motion.div>

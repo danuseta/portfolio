@@ -7,19 +7,39 @@ import type { Project } from '@/src/lib/api/types';
 import SectionTitle from '@/src/components/ui/SectionTitle';
 import TechStack from '@/src/components/ui/TechStack';
 import SectionBackground from '@/src/components/ui/SectionBackground';
+import Image from 'next/image';
 
 const getMonthNumber = (month: string): number => {
   const monthMap: { [key: string]: number } = {
-    'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
-    'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11,
-    'January': 0, 'February': 1, 'March': 2, 'April': 3, 'June': 5,
-    'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11
+    Jan: 0,
+    Feb: 1,
+    Mar: 2,
+    Apr: 3,
+    May: 4,
+    Jun: 5,
+    Jul: 6,
+    Aug: 7,
+    Sep: 8,
+    Oct: 9,
+    Nov: 10,
+    Dec: 11,
+    January: 0,
+    February: 1,
+    March: 2,
+    April: 3,
+    June: 5,
+    July: 6,
+    August: 7,
+    September: 8,
+    October: 9,
+    November: 10,
+    December: 11
   };
   return monthMap[month] || 0;
 };
 
 const getStartDateFromPeriod = (period: string): Date => {
-  const dates = period.split('-').map(d => d.trim());
+  const dates = period.split('-').map((d) => d.trim());
   const startDate = dates[0];
   const [month, year] = startDate.split(' ');
   return new Date(parseInt(year), getMonthNumber(month));
@@ -50,19 +70,20 @@ export default function Projects() {
     loadProjects();
   }, []);
 
-  if (loading) return (
-    <div className="flex items-center justify-center min-h-[400px]">
-      <div className="flex flex-col items-center gap-2">
-        <div className="w-8 h-8 border-4 border-purple-400 border-t-transparent rounded-full animate-spin" />
-        <span className="text-gray-300">Loading projects...</span>
+  if (loading)
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="flex flex-col items-center gap-2">
+          <div className="w-8 h-8 border-4 border-purple-400 border-t-transparent rounded-full animate-spin" />
+          <span className="text-gray-300">Loading projects...</span>
+        </div>
       </div>
-    </div>
-  );
+    );
 
   const featuredProjects = projects
-    .filter(p => p.featured)
+    .filter((p) => p.featured)
     .slice(0, 4)
-    .map(project => ({
+    .map((project) => ({
       ...project,
       image: project.image?.url || project.image
     }));
@@ -72,22 +93,22 @@ export default function Projects() {
     visible: {
       transition: {
         delayChildren: 0.2,
-        staggerChildren: 0.1,
+        staggerChildren: 0.1
       }
     }
   };
 
   const itemVariants = {
-    hidden: { 
+    hidden: {
       opacity: 0,
-      y: 20,
+      y: 20
     },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
+        ease: 'easeOut'
       }
     }
   };
@@ -99,17 +120,14 @@ export default function Projects() {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: '-100px' }}
           variants={containerVariants}
         >
           <motion.div variants={itemVariants}>
-            <SectionTitle 
-              title="Projects" 
-              subtitle="Some of my best works and side projects"
-            />
+            <SectionTitle title="Projects" subtitle="Some of my best works and side projects" />
           </motion.div>
 
-          <motion.div 
+          <motion.div
             variants={containerVariants}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-16"
           >
@@ -124,11 +142,15 @@ export default function Projects() {
                 <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-purple-500/10 to-blue-500/10">
                   {project.image && (
                     <>
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        className="object-cover w-full h-full transform group-hover:scale-110 transition-transform duration-500"
-                      />
+                      <div className="relative w-full h-full">
+                        <Image
+                          src={project.image}
+                          alt={project.title}
+                          fill
+                          className="object-cover transform group-hover:scale-110 transition-transform duration-500"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                        />
+                      </div>
                       <motion.button
                         whileHover={{ scale: 1.1 }}
                         onClick={() => setSelectedImage(project.image)}
@@ -142,10 +164,12 @@ export default function Projects() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 </div>
 
-                {/* Content */}
+                {/* Keep existing content section */}
                 <div className="p-4 md:p-6 relative">
-                  <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3 text-purple-400 group-hover:text-purple-200
-                               transition-colors tracking-wide line-clamp-1">
+                  <h3
+                    className="text-lg md:text-xl font-bold mb-2 md:mb-3 text-purple-400 group-hover:text-purple-200
+                               transition-colors tracking-wide line-clamp-1"
+                  >
                     {project.title}
                   </h3>
 
@@ -153,7 +177,7 @@ export default function Projects() {
                     {project.description}
                   </p>
 
-                  <TechStack 
+                  <TechStack
                     technologies={project.technologies}
                     size="sm"
                     className="mb-3 md:mb-4 gap-1.5"
@@ -184,22 +208,21 @@ export default function Projects() {
                 </div>
 
                 {/* Hover Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-transparent to-blue-500/10 
-                             opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-transparent to-blue-500/10 
+                             opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                />
               </motion.div>
             ))}
           </motion.div>
 
-          <motion.div 
-            variants={itemVariants}
-            className="flex justify-center"
-          >
+          <motion.div variants={itemVariants} className="flex justify-center">
             <Link href="/projects" className="inline-block">
               <motion.button
-                whileHover={{ 
+                whileHover={{
                   scale: 1.02,
                   x: 5,
-                  backgroundColor: "rgba(255, 255, 255, 0.1)"
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
                 }}
                 whileTap={{ scale: 0.95 }}
                 className="flex items-center gap-2 text-purple-400 hover:text-purple-300 
@@ -227,13 +250,18 @@ export default function Projects() {
             animate={{ scale: 1 }}
             exit={{ scale: 0.9 }}
             className="relative max-w-4xl w-full max-h-[90vh] rounded-xl overflow-hidden"
-            onClick={e => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
           >
-            <img
-              src={selectedImage}
-              alt="Project Preview"
-              className="w-full h-full object-contain"
-            />
+            <div className="relative w-full h-[80vh]">
+              <Image
+                src={selectedImage}
+                alt="Project Preview"
+                fill
+                className="object-contain"
+                sizes="100vw"
+                priority
+              />
+            </div>
           </motion.div>
         </motion.div>
       )}

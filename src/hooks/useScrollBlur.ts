@@ -10,17 +10,17 @@ export function useScrollBlur() {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
       const windowHeight = window.innerHeight;
-      
+
       const blurValue = Math.min((scrollPosition / (windowHeight * 0.2)) * 25, 40);
       setBlur(blurValue);
-      
+
       const progress = scrollPosition / windowHeight;
       setScrollProgress(progress);
     };
 
     window.addEventListener('scroll', handleScroll);
     handleScroll();
-    
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

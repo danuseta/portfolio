@@ -20,8 +20,8 @@ export default function CertificatesPage() {
     const fetchCertificates = async () => {
       try {
         const data = await getCertificates();
-        const sortedData = data.sort((a, b) => 
-          new Date(b.issueDate).getTime() - new Date(a.issueDate).getTime()
+        const sortedData = data.sort(
+          (a, b) => new Date(b.issueDate).getTime() - new Date(a.issueDate).getTime()
         );
         setCertificates(sortedData);
       } catch (err) {
@@ -33,7 +33,7 @@ export default function CertificatesPage() {
         }, 2000);
       }
     };
-  
+
     fetchCertificates();
   }, []);
 
@@ -90,8 +90,12 @@ export default function CertificatesPage() {
           </Link>
 
           <div className="mb-8 md:mb-12">
-            <h1 className="text-2xl md:text-4xl font-bold mb-2 md:mb-3 text-purple-400">All Certificates</h1>
-            <p className="text-gray-300 tracking-wide text-sm md:text-base">Browse through my professional certifications and achievements</p>
+            <h1 className="text-2xl md:text-4xl font-bold mb-2 md:mb-3 text-purple-400">
+              All Certificates
+            </h1>
+            <p className="text-gray-300 tracking-wide text-sm md:text-base">
+              Browse through my professional certifications and achievements
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
@@ -100,43 +104,45 @@ export default function CertificatesPage() {
                 key={certificate._id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ 
+                transition={{
                   duration: 0.6,
-                  ease: "easeOut",
-                  delay: index * 0.1 
+                  ease: 'easeOut',
+                  delay: index * 0.1
                 }}
                 className="group relative bg-white/5 backdrop-blur-lg rounded-lg md:rounded-xl overflow-hidden
                           hover:bg-white/10 transition-all duration-700 flex flex-col h-full"
               >
                 {/* Certificate Image/Preview */}
                 <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-purple-500/10 to-blue-500/10">
-                {certificate.certificateFile && (
-  <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-purple-500/10 to-blue-500/10">
-    <Image
-      src={certificate.certificateFile.url}
-      alt={certificate.title}
-      fill
-      className="object-cover transform group-hover:scale-110 transition-transform duration-500"
-      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-    />
-    <motion.button
-      whileHover={{ scale: 1.1 }}
-      onClick={() => setSelectedImage(certificate.certificateFile.url)}
-      className="absolute top-2 right-2 md:top-3 md:right-3 p-2 rounded-full bg-black/50 text-white 
+                  {certificate.certificateFile && (
+                    <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-purple-500/10 to-blue-500/10">
+                      <Image
+                        src={certificate.certificateFile.url}
+                        alt={certificate.title}
+                        fill
+                        className="object-cover transform group-hover:scale-110 transition-transform duration-500"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        onClick={() => setSelectedImage(certificate.certificateFile.url)}
+                        className="absolute top-2 right-2 md:top-3 md:right-3 p-2 rounded-full bg-black/50 text-white 
                 hover:bg-black/70 transition-all z-10"
-    >
-      <ImageIcon className="w-3 h-3 md:w-4 md:h-4" />
-    </motion.button>
-  </div>
-)}
+                      >
+                        <ImageIcon className="w-3 h-3 md:w-4 md:h-4" />
+                      </motion.button>
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 </div>
 
                 {/* Content */}
                 <div className="p-4 md:p-6 flex flex-col flex-grow">
                   <div className="flex-grow space-y-2 md:space-y-3">
-                    <h3 className="text-lg md:text-xl font-bold text-purple-400 group-hover:text-purple-200
-                                 transition-colors tracking-wide line-clamp-2">
+                    <h3
+                      className="text-lg md:text-xl font-bold text-purple-400 group-hover:text-purple-200
+                                 transition-colors tracking-wide line-clamp-2"
+                    >
                       {certificate.title}
                     </h3>
 
@@ -176,7 +182,11 @@ export default function CertificatesPage() {
                   </div>
 
                   <div className="mt-4 pt-4 border-t border-purple-500/10">
-                    <Link href={certificate.certificateFile.url} target="_blank" rel="noopener noreferrer">
+                    <Link
+                      href={certificate.certificateFile.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <motion.button
                         whileHover={{ x: 5 }}
                         className="flex items-center gap-1.5 md:gap-2 text-purple-400 hover:text-purple-300 tracking-wide text-sm md:text-base"
@@ -189,8 +199,10 @@ export default function CertificatesPage() {
                 </div>
 
                 {/* Hover Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-transparent to-blue-500/10 
-                             opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-transparent to-blue-500/10 
+                             opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                />
               </motion.div>
             ))}
           </div>
@@ -206,24 +218,24 @@ export default function CertificatesPage() {
           className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
           onClick={() => setSelectedImage(null)}
         >
-<motion.div
-  initial={{ scale: 0.9 }}
-  animate={{ scale: 1 }}
-  exit={{ scale: 0.9 }}
-  className="relative max-w-4xl w-full max-h-[90vh] rounded-xl overflow-hidden"
-  onClick={e => e.stopPropagation()}
->
-  <div className="relative w-full h-[80vh]">
-    <Image
-      src={selectedImage}
-      alt="Certificate Preview"
-      fill
-      className="object-contain"
-      sizes="100vw"
-      priority
-    />
-  </div>
-</motion.div>
+          <motion.div
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0.9 }}
+            className="relative max-w-4xl w-full max-h-[90vh] rounded-xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative w-full h-[80vh]">
+              <Image
+                src={selectedImage}
+                alt="Certificate Preview"
+                fill
+                className="object-contain"
+                sizes="100vw"
+                priority
+              />
+            </div>
+          </motion.div>
         </motion.div>
       )}
     </motion.div>

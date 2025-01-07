@@ -11,26 +11,45 @@ import SectionBackground from '../ui/SectionBackground';
 
 const getMonthNumber = (month: string): number => {
   const monthMap: { [key: string]: number } = {
-    'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
-    'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11,
-    'January': 0, 'February': 1, 'March': 2, 'April': 3, 'June': 5,
-    'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11
+    Jan: 0,
+    Feb: 1,
+    Mar: 2,
+    Apr: 3,
+    May: 4,
+    Jun: 5,
+    Jul: 6,
+    Aug: 7,
+    Sep: 8,
+    Oct: 9,
+    Nov: 10,
+    Dec: 11,
+    January: 0,
+    February: 1,
+    March: 2,
+    April: 3,
+    June: 5,
+    July: 6,
+    August: 7,
+    September: 8,
+    October: 9,
+    November: 10,
+    December: 11
   };
   return monthMap[month] || 0;
 };
 
 const getStartDateFromPeriod = (period: string): Date => {
   const startDate = period.split('-')[0].trim();
-  
+
   const [month, year] = startDate.split(' ');
-  
+
   return new Date(parseInt(year), getMonthNumber(month));
 };
 
 const sortEducation = (a: Education, b: Education): number => {
   const dateA = getStartDateFromPeriod(a.year);
   const dateB = getStartDateFromPeriod(b.year);
-  return dateB.getTime() - dateA.getTime(); 
+  return dateB.getTime() - dateA.getTime();
 };
 
 export default function Education() {
@@ -68,15 +87,14 @@ export default function Education() {
     <section className="py-8 md:py-12">
       <SectionBackground variant="purple" density="low" />
       <div className="container mx-auto px-4 md:px-6">
-        <SectionTitle 
-          title="Education" 
-          subtitle="My academic journey and qualifications"
-        />
+        <SectionTitle title="Education" subtitle="My academic journey and qualifications" />
 
         <div className="relative mt-12 md:mt-20">
           {/* Vertical Timeline Line */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-purple-400 via-purple-400/50 to-transparent
-                        md:-translate-x-px" />
+          <div
+            className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-purple-400 via-purple-400/50 to-transparent
+                        md:-translate-x-px"
+          />
 
           {educations.map((edu, index) => (
             <motion.div
@@ -96,7 +114,9 @@ export default function Education() {
               </div>
 
               {/* Content Card */}
-              <div className={`w-full md:w-5/12 ${index % 2 === 0 ? 'md:ml-auto md:pl-8' : 'md:mr-auto md:pr-8'}`}>
+              <div
+                className={`w-full md:w-5/12 ${index % 2 === 0 ? 'md:ml-auto md:pl-8' : 'md:mr-auto md:pr-8'}`}
+              >
                 <motion.div
                   whileHover={{ scale: 1.02 }}
                   className="bg-white/5 backdrop-blur-lg rounded-xl p-4 md:p-6 shadow-xl
@@ -107,16 +127,18 @@ export default function Education() {
                     <div className="p-2 rounded-lg bg-purple-400/10 shrink-0">
                       <GraduationCap className="w-5 h-5 md:w-6 md:h-6 text-purple-400" />
                     </div>
-                    <h3 className="text-lg md:text-xl font-bold text-purple-400 tracking-wider">{edu.school}</h3>
+                    <h3 className="text-lg md:text-xl font-bold text-purple-400 tracking-wider">
+                      {edu.school}
+                    </h3>
                   </div>
 
                   {/* Info Row: Year and Location */}
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-gray-300 mb-4 text-sm md:text-base tracking-wide">
-  <div className="flex items-center gap-2">
-    <Calendar className="w-4 h-4" />
-    <span>{edu.year}</span>
-  </div>
-  {/* 
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4" />
+                      <span>{edu.year}</span>
+                    </div>
+                    {/* 
   {edu.location && (
     <div className="flex items-center gap-2">
       <MapPin className="w-4 h-4" />
@@ -124,14 +146,16 @@ export default function Education() {
     </div>
   )}
   */}
-</div>
+                  </div>
 
                   {/* Degree */}
                   <div className="flex items-center gap-2 mb-4">
                     <div className="shrink-0">
                       <Book className="w-4 h-4 text-purple-400" />
                     </div>
-                    <p className="text-purple-400 font-medium tracking-wide text-sm md:text-base">{edu.degree}</p>
+                    <p className="text-purple-400 font-medium tracking-wide text-sm md:text-base">
+                      {edu.degree}
+                    </p>
                   </div>
 
                   {/* Score */}
@@ -139,7 +163,7 @@ export default function Education() {
                     <div className="flex items-center gap-2 mb-4 text-purple-400">
                       <Award className="w-4 h-4" />
                       <span className="font-medium tracking-wide text-sm md:text-base">
-                        {edu.score.type === 'GPA' 
+                        {edu.score.type === 'GPA'
                           ? `GPA: ${edu.score.value.toFixed(2)}`
                           : `Score: ${edu.score.value.toFixed(2)}`}
                       </span>
@@ -157,10 +181,7 @@ export default function Education() {
                   {edu.achievements && edu.achievements.length > 0 && (
                     <div className="space-y-2">
                       {edu.achievements.map((achievement, index) => (
-                        <div 
-                          key={index}
-                          className="flex items-start gap-2 text-gray-300"
-                        >
+                        <div key={index} className="flex items-start gap-2 text-gray-300">
                           <div className="w-1.5 h-1.5 rounded-full bg-purple-400 mt-2" />
                           <span className="tracking-wide text-sm md:text-base">{achievement}</span>
                         </div>
@@ -181,7 +202,7 @@ export default function Education() {
             transition={{
               duration: 4,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: 'easeInOut'
             }}
             className="absolute -right-10 top-1/4 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl"
           />
@@ -193,14 +214,14 @@ export default function Education() {
             transition={{
               duration: 5,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: 'easeInOut'
             }}
             className="absolute -left-10 bottom-1/4 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl"
           />
         </div>
 
         {/* View Organization Button */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -208,10 +229,10 @@ export default function Education() {
         >
           <Link href="/organizations" className="inline-block">
             <motion.button
-              whileHover={{ 
+              whileHover={{
                 scale: 1.02,
                 x: 5,
-                backgroundColor: "rgba(255, 255, 255, 0.1)"
+                backgroundColor: 'rgba(255, 255, 255, 0.1)'
               }}
               whileTap={{ scale: 0.95 }}
               className="flex items-center gap-2 text-purple-400 hover:text-purple-300 

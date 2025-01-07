@@ -1,4 +1,12 @@
-import { Profile, Education, Experience, Project, Organization, Certificate, Feedback } from './types';
+import {
+  Profile,
+  Education,
+  Experience,
+  Project,
+  Organization,
+  Certificate,
+  Feedback
+} from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -44,7 +52,6 @@ export async function getFeaturedOrganizations(): Promise<Organization[]> {
   return res.json();
 }
 
-
 export async function getCertificates(): Promise<Certificate[]> {
   const res = await fetch(`${API_URL}/certificates`);
   if (!res.ok) throw new Error('Failed to fetch certificates');
@@ -55,9 +62,9 @@ export async function submitFeedback(feedbackData: Omit<Feedback, '_id'>): Promi
   const res = await fetch(`${API_URL}/feedback`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(feedbackData),
+    body: JSON.stringify(feedbackData)
   });
   if (!res.ok) throw new Error('Failed to submit feedback');
   return res.json();

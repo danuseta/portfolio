@@ -41,7 +41,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           const headerOffset = 100;
           const elementPosition = element.getBoundingClientRect().top;
           const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-          
+
           window.scrollTo({
             top: offsetPosition,
             behavior: 'smooth'
@@ -53,30 +53,30 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const sidebarVariants = {
     initial: {
-      x: "100%",
+      x: '100%',
       opacity: 0,
-      skewX: -5,
+      skewX: -5
     },
     open: {
-      x: "0%",
+      x: '0%',
       opacity: 1,
       skewX: 0,
       transition: {
-        type: "spring",
+        type: 'spring',
         stiffness: 70,
         damping: 20,
         mass: 1,
-        when: "beforeChildren",
-        staggerChildren: 0.1,
+        when: 'beforeChildren',
+        staggerChildren: 0.1
       }
     },
     closed: {
-      x: "100%",
+      x: '100%',
       transition: {
-        type: "spring",
+        type: 'spring',
         stiffness: 400,
         damping: 40,
-        when: "afterChildren",
+        when: 'afterChildren',
         staggerChildren: 0.05,
         staggerDirection: -1
       }
@@ -84,27 +84,27 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   };
 
   const menuItemVariants = {
-    initial: { 
+    initial: {
       x: 100,
       opacity: 0,
-      skewX: -10,
+      skewX: -10
     },
-    open: { 
+    open: {
       x: 0,
       opacity: 1,
       skewX: 0,
       transition: {
-        type: "spring",
+        type: 'spring',
         stiffness: 100,
         damping: 15,
         mass: 1
       }
     },
-    closed: { 
+    closed: {
       x: 50,
       opacity: 0,
       transition: {
-        type: "spring",
+        type: 'spring',
         stiffness: 400,
         damping: 40
       }
@@ -114,7 +114,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const backdropVariants = {
     initial: {
       opacity: 0,
-      scale: 0.9,
+      scale: 0.9
     },
     open: {
       opacity: 1,
@@ -133,17 +133,17 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   };
 
   const socialIconVariants = {
-    initial: { 
+    initial: {
       scale: 0,
       opacity: 0,
       rotate: -180
     },
-    open: { 
+    open: {
       scale: 1,
       opacity: 1,
       rotate: 0,
       transition: {
-        type: "spring",
+        type: 'spring',
         stiffness: 200,
         damping: 15
       }
@@ -163,15 +163,16 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     { name: 'Certificate', href: '/certificates' },
     { name: 'Organizations', href: '/organizations' },
     { name: 'Experience', id: 'experience' },
-    { name: 'Projects', id: 'projects' },
+    { name: 'Projects', id: 'projects' }
   ];
 
-  const availableSocialLinks = profile?.socialLinks
-    .filter(link => link.isActive)
-    .map(link => ({
-      platform: link.platform.toLowerCase(),
-      link: link.url
-    })) || [];
+  const availableSocialLinks =
+    profile?.socialLinks
+      .filter((link) => link.isActive)
+      .map((link) => ({
+        platform: link.platform.toLowerCase(),
+        link: link.url
+      })) || [];
 
   if (profile?.email) {
     availableSocialLinks.push({
@@ -201,14 +202,14 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             className="fixed right-0 top-0 bottom-0 w-full max-w-[500px] bg-[#1a191d]/95 backdrop-blur-lg z-50 font-serif"
           >
             {/* Header with 3D effect */}
-            <motion.div 
+            <motion.div
               variants={menuItemVariants}
               className="flex justify-between items-center p-8 relative"
               style={{
-                perspective: "1000px"
+                perspective: '1000px'
               }}
             >
-              <motion.h2 
+              <motion.h2
                 className="text-xl font-medium text-gray-100 font-heading tracking-wide"
                 whileHover={{
                   rotateX: [0, 15, 0],
@@ -241,7 +242,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   >
                     <a
                       href={item.href || `#${item.id}`}
-                      onClick={(e) => item.href ? onClose() : handleLinkClick(e, item.id)}
+                      onClick={(e) => (item.href ? onClose() : handleLinkClick(e, item.id))}
                       className="text-2xl font-heading tracking-wider text-gray-100 hover:text-purple-400 transition-colors block relative"
                     >
                       <span className="relative z-10">{item.name}</span>
@@ -258,12 +259,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             </nav>
 
             {/* Bottom Section with stagger effect */}
-            <motion.div 
+            <motion.div
               variants={menuItemVariants}
               className="absolute bottom-0 left-0 right-0 p-8 space-y-8"
             >
               <div className="space-y-4">
-                <motion.h2 
+                <motion.h2
                   variants={menuItemVariants}
                   className="text-2xl font-heading tracking-wide text-gray-100"
                   whileHover={{
@@ -275,8 +276,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 </motion.h2>
                 <motion.div variants={menuItemVariants} className="space-y-2">
                   {profile?.email && (
-                    <motion.a 
-                      href={`mailto:${profile.email}`} 
+                    <motion.a
+                      href={`mailto:${profile.email}`}
                       className="text-sm text-gray-300 hover:text-purple-400 transition-colors tracking-wide block"
                       whileHover={{ x: 5 }}
                     >
@@ -290,10 +291,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               </div>
 
               {/* Social Icons with rotating entry */}
-              <motion.div 
-                variants={menuItemVariants}
-                className="flex flex-wrap gap-4"
-              >
+              <motion.div variants={menuItemVariants} className="flex flex-wrap gap-4">
                 {availableSocialLinks.map(({ platform, link }, index) => (
                   <motion.a
                     key={platform}
@@ -301,7 +299,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                     variants={socialIconVariants}
-                    whileHover={{ 
+                    whileHover={{
                       scale: 1.2,
                       rotate: 360,
                       transition: { duration: 0.5 }

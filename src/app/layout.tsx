@@ -1,22 +1,18 @@
 'use client';
 
-import { Inter } from 'next/font/google'
-import './globals.css'
-import { ThemeProvider } from '@/src/components/providers/theme-provider'
-import Navbar from '@/src/components/shared/Navbar'
-import Footer from '@/src/components/shared/Footer'
-import { usePathname } from 'next/navigation'
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { ThemeProvider } from '@/src/components/providers/theme-provider';
+import Navbar from '@/src/components/shared/Navbar';
+import Footer from '@/src/components/shared/Footer';
+import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isProjectsPage = pathname === '/projects';
   const isOrganizationsPage = pathname === '/organizations';
@@ -49,15 +45,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="overflow-x-hidden" suppressHydrationWarning>
       <body className={`${inter.className} overflow-x-hidden`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-        >
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           {!isLoading && !hideNavbar && <Navbar />}
-          <div className="overflow-x-hidden">
-            {children}
-          </div>
+          <div className="overflow-x-hidden">{children}</div>
           {!isLoading && <Footer />}
 
           {/* Scroll to Top Button */}
