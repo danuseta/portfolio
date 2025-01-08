@@ -26,12 +26,21 @@ export interface Profile {
 }
 
 export interface Education {
-  _id: string;
-  school: string;
-  degree: string;
-  year: string;
-  description: string;
-  location: string;
+    _id: string;
+    school: string;
+    degree: string;
+    year: string;
+    description?: string;
+    achievements?: string[];
+    location?: string;
+    score?: {
+      value: number;
+      type: 'GPA' | 'SCORE';
+    };
+    featured?: {
+      showScore: boolean;
+    };
+
 }
 
 export interface Experience {

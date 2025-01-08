@@ -9,7 +9,6 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
 import Head from 'next/head';
-import { registerServiceWorker } from './sw';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -30,7 +29,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 200);
-      registerServiceWorker();
     };
 
     window.addEventListener('scroll', handleScroll);
