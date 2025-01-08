@@ -65,7 +65,7 @@ export const socialIcons = {
   patreon: FaPatreon,
   behance: FaBehance,
   dribbble: FaDribbble,
-  
+
   // Tambahan social icons baru
   spotify: FaSpotify,
   vimeo: FaVimeo,

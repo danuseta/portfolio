@@ -17,8 +17,7 @@ import type { Profile } from '@/src/lib/api/types';
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const { blur, heroOpacity, contentOpacity, contentY } =
-    useScrollAnimations();
+  const { blur, heroOpacity, contentOpacity, contentY } = useScrollAnimations();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -82,6 +81,7 @@ export default function Home() {
                         src={profile?.aboutImage?.url || '/assets/profile-small.jpg'}
                         alt={profile?.fullName || 'Profile Photo'}
                         fill
+                        unoptimized
                         className="object-cover rounded-xl"
                       />
                     </div>

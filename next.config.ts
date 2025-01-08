@@ -5,16 +5,13 @@ const nextConfig = {
     serverActions: true,  
   },
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
   typescript: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has TypeScript errors.
     ignoreBuildErrors: true,
   },
   images: {
+    unoptimized: true,  
     remotePatterns: [
       {
         protocol: 'https',
@@ -22,7 +19,7 @@ const nextConfig = {
         pathname: '/du6o6c6dc/image/upload/',
       },
     ],
-  },
+  },,
   transpilePackages: ['react-icons', 'framer-motion'],
   reactStrictMode: true,
 };

@@ -80,6 +80,7 @@ export default function Hero() {
                   src={profile?.heroImage1?.url || '/assets/profile-small.jpg'}
                   alt={`${profile?.fullName || 'Developer'} Setup`}
                   fill
+                  unoptimized
                   className="object-cover brightness-75 rounded-3xl"
                 />
               </motion.div>
@@ -97,6 +98,7 @@ export default function Hero() {
                   src={profile?.heroImage2?.url || '/assets/profile-small.jpg'}
                   alt={profile?.fullName || 'Developer'}
                   fill
+                  unoptimized
                   className="object-cover brightness-75 rounded-3xl"
                 />
               </motion.div>

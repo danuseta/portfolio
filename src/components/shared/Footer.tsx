@@ -25,12 +25,9 @@ export default function Footer() {
     <footer className="backdrop-blur-md">
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-center items-center">
-          <motion.div 
-            className="text-sm text-gray-400 text-center" 
-            whileHover={{ scale: 1.02 }}
-          >
-            © 2024 <span className="text-purple-400">{profile?.fullName || 'Loading...'}</span>. All rights
-            reserved.
+          <motion.div className="text-sm text-gray-400 text-center" whileHover={{ scale: 1.02 }}>
+            © 2024 <span className="text-purple-400">{profile?.fullName || 'Loading...'}</span>.
+            All rights reserved.
           </motion.div>
         </div>
       </div>

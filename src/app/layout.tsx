@@ -51,35 +51,35 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-title" content="danuseta" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="theme-color" content="#1a191d" />
-        
+
         {/* PWA Icons */}
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/images/icons/icon-192x192.png" />
         <link rel="icon" type="image/png" href="/images/icons/icon-384x384.png" />
       </head>
       <body className={`${inter.className} overflow-x-hidden`}>
-      {!isLoading && !hideNavbar && <Navbar />}
-<div className="overflow-x-hidden">{children}</div>
-{!isLoading && <Footer />}
+        {!isLoading && !hideNavbar && <Navbar />}
+        <div className="overflow-x-hidden">{children}</div>
+        {!isLoading && <Footer />}
 
-{/* Scroll to Top Button */}
-<AnimatePresence>
-  {showScrollTop && (
-    <motion.button
-      initial={{ opacity: 0, scale: 0.5 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.5 }}
-      onClick={scrollToTop}
-      className="fixed bottom-20 right-8 md:bottom-24 md:right-12 p-2 md:p-3 bg-purple-400/20 
+        {/* Scroll to Top Button */}
+        <AnimatePresence>
+          {showScrollTop && (
+            <motion.button
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
+              onClick={scrollToTop}
+              className="fixed bottom-20 right-8 md:bottom-24 md:right-12 p-2 md:p-3 bg-purple-400/20 
                 hover:bg-purple-400/30 backdrop-blur-sm rounded-full z-50
                 transition-colors duration-300"
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
-    >
-      <ArrowUp className="w-5 h-5 md:w-6 md:h-6 text-purple-400" />
-    </motion.button>
-  )}
-</AnimatePresence>
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <ArrowUp className="w-5 h-5 md:w-6 md:h-6 text-purple-400" />
+            </motion.button>
+          )}
+        </AnimatePresence>
       </body>
     </html>
   );
