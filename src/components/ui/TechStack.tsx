@@ -570,7 +570,7 @@ const iconComponents = {
 
 const iconColors = {
   React: 'text-cyan-400',
-  'Next.js': 'text-black dark:text-white',
+  'Next.js': 'text-white',
   'Vue.js': 'text-emerald-500',
   Angular: 'text-red-600',
   Svelte: 'text-orange-500',
