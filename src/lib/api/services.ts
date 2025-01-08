@@ -1,3 +1,4 @@
+import { API_URL } from './config';
 import {
   Profile,
   Education,
@@ -7,8 +8,6 @@ import {
   Certificate,
   Feedback
 } from './types';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function getProfile(): Promise<Profile> {
   const res = await fetch(`${API_URL}api/profile`);
