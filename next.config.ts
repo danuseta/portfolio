@@ -19,12 +19,9 @@ const nextConfig: NextConfig = {
   }
 };
 
-const withPWAConfig = withPWA({
+export default withPWA({
   dest: 'public',
   register: true,
   skipWaiting: true,
   disable: process.env.NODE_ENV === 'development'
-});
-
-// @ts-ignore
-export default withPWAConfig(nextConfig);
+})(nextConfig);
