@@ -1,9 +1,8 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    appDir: true,
-    serverActions: true,  
-  },
+import withPWA from 'next-pwa';
+import type { NextConfig } from 'next';
+
+const nextConfig: NextConfig = {
+  reactStrictMode: true,
   images: {
     remotePatterns: [
       {
@@ -14,7 +13,18 @@ const nextConfig = {
     ],
   },
   transpilePackages: ['react-icons', 'framer-motion'],
-  reactStrictMode: true,
+  experimental: {
+    appDir: true,
+    serverActions: true,
+  }
 };
 
-module.exports = nextConfig;
+const withPWAConfig = withPWA({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development'
+});
+
+// @ts-ignore
+export default withPWAConfig(nextConfig);

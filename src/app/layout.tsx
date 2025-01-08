@@ -9,6 +9,8 @@ import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
+import Head from 'next/head';
+import { registerServiceWorker } from './sw';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -29,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 200);
+      registerServiceWorker();
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -44,6 +47,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="en" className="overflow-x-hidden" suppressHydrationWarning>
+      <head>
+        <meta name="application-name" content="danuseta" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="danuseta" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" content="#1a191d" />
+        
+        {/* PWA Icons */}
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/images/icons/icon-192x192.png" />
+        <link rel="icon" type="image/png" href="/images/icons/icon-384x384.png" />
+      </head>
       <body className={`${inter.className} overflow-x-hidden`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           {!isLoading && !hideNavbar && <Navbar />}
