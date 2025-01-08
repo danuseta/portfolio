@@ -120,6 +120,7 @@ export default function CertificatesPage() {
                         src={certificate.certificateFile.url}
                         alt={certificate.title}
                         fill
+                        unoptimized
                         className="object-cover transform group-hover:scale-110 transition-transform duration-500"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
@@ -233,6 +234,7 @@ export default function CertificatesPage() {
                 className="object-contain"
                 sizes="100vw"
                 priority
+                unoptimized
               />
             </div>
           </motion.div>

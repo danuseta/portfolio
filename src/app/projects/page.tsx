@@ -160,6 +160,7 @@ export default function ProjectsPage() {
                           src={project.image.url}
                           alt={project.title}
                           fill
+                          unoptimized
                           className="object-cover transform group-hover:scale-110 transition-transform duration-500"
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                         />
@@ -254,6 +255,7 @@ export default function ProjectsPage() {
                 src={selectedImage}
                 alt="Project Preview"
                 fill
+                unoptimized
                 className="object-contain"
                 sizes="100vw"
                 priority
