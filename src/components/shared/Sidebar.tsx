@@ -2,7 +2,6 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
-import { ThemeToggle } from './ThemeToggle';
 import { SocialIcon } from '../ui/SocialIcons';
 import { useState, useEffect } from 'react';
 import type { Profile } from '@/src/lib/api/types';

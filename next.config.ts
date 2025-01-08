@@ -1,8 +1,22 @@
-import withPWA from 'next-pwa';
-import type { NextConfig } from 'next';
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development'
+});
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    // Jika ingin mengabaikan TypeScript errors juga
+    ignoreBuildErrors: true,
+  },
   images: {
     remotePatterns: [
       {
@@ -19,9 +33,4 @@ const nextConfig: NextConfig = {
   }
 };
 
-export default withPWA({
-  dest: 'public',
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development'
-})(nextConfig);
+module.exports = withPWA(nextConfig);

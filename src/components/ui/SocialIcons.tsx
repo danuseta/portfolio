@@ -11,24 +11,14 @@ import {
   Mail,
   Globe,
   Rss,
-  LinkedinIcon,
-  GithubIcon,
-  TwitterIcon,
-  YoutubeIcon,
-  InstagramIcon,
-  FacebookIcon,
-  TwitchIcon,
-  DiscordIcon,
-  GlobeIcon,
-  MailIcon,
-  PhoneIcon,
-  MapPinIcon,
-  CalendarIcon,
-  BookOpenIcon,
-  HashIcon,
-  Share2Icon,
-  LinkIcon,
-  AtSignIcon
+  BookOpen,
+  Hash,
+  Share2,
+  Link,
+  AtSign,
+  Phone,
+  MapPin,
+  Calendar
 } from 'lucide-react';
 
 import {
@@ -42,19 +32,28 @@ import {
   FaDev,
   FaPatreon,
   FaBehance,
-  FaDribbble
+  FaDribbble,
+  FaSpotify,
+  FaVimeo,
+  FaFlickr,
+  FaWeibo,
+  FaLine,
+  FaSlack,
+  FaStackOverflow,
+  FaGitlab,
+  FaBitbucket
 } from 'react-icons/fa';
 
 export const socialIcons = {
-  github: GithubIcon,
-  linkedin: LinkedinIcon,
-  instagram: InstagramIcon,
-  facebook: FacebookIcon,
-  twitter: TwitterIcon,
+  github: Github,
+  linkedin: Linkedin,
+  instagram: Instagram,
+  facebook: Facebook,
+  twitter: Twitter,
   tiktok: FaTiktok,
-  youtube: YoutubeIcon,
-  twitch: TwitchIcon,
-  discord: DiscordIcon,
+  youtube: Youtube,
+  twitch: Twitch,
+  discord: Discord,
   whatsapp: FaWhatsapp,
   telegram: FaTelegram,
 
@@ -66,24 +65,37 @@ export const socialIcons = {
   patreon: FaPatreon,
   behance: FaBehance,
   dribbble: FaDribbble,
+  
+  // Tambahan social icons baru
+  spotify: FaSpotify,
+  vimeo: FaVimeo,
+  flickr: FaFlickr,
+  weibo: FaWeibo,
+  line: FaLine,
+  slack: FaSlack,
+  stackoverflow: FaStackOverflow,
+  gitlab: FaGitlab,
+  bitbucket: FaBitbucket,
 
-  email: MailIcon,
-  phone: PhoneIcon,
-  website: GlobeIcon,
-  location: MapPinIcon,
-  calendar: CalendarIcon,
-  blog: BookOpenIcon,
+  // Utility icons
+  email: Mail,
+  phone: Phone,
+  website: Globe,
+  location: MapPin,
+  calendar: Calendar,
+  blog: BookOpen,
   rss: Rss,
-  hashtag: HashIcon,
-  share: Share2Icon,
-  link: LinkIcon,
-  atSign: AtSignIcon
+  hashtag: Hash,
+  share: Share2,
+  link: Link,
+  atSign: AtSign,
+  message: MessageCircle
 };
 
 export type SocialPlatform = keyof typeof socialIcons;
 
 export const getSocialIcon = (platform: string) => {
-  return socialIcons[platform.toLowerCase() as SocialPlatform] || LinkIcon;
+  return socialIcons[platform.toLowerCase() as SocialPlatform] || Link;
 };
 
 export const SocialIcon = ({

@@ -17,7 +17,7 @@ import type { Profile } from '@/src/lib/api/types';
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const { blur, heroOpacity, contentOpacity, contentY, scrollIndicatorOpacity } =
+  const { blur, heroOpacity, contentOpacity, contentY } =
     useScrollAnimations();
 
   useEffect(() => {

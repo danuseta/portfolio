@@ -2,7 +2,6 @@
 
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { ThemeProvider } from '@/src/components/providers/theme-provider';
 import Navbar from '@/src/components/shared/Navbar';
 import Footer from '@/src/components/shared/Footer';
 import { usePathname } from 'next/navigation';
@@ -61,30 +60,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="icon" type="image/png" href="/images/icons/icon-384x384.png" />
       </head>
       <body className={`${inter.className} overflow-x-hidden`}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          {!isLoading && !hideNavbar && <Navbar />}
-          <div className="overflow-x-hidden">{children}</div>
-          {!isLoading && <Footer />}
+      {!isLoading && !hideNavbar && <Navbar />}
+<div className="overflow-x-hidden">{children}</div>
+{!isLoading && <Footer />}
 
-          {/* Scroll to Top Button */}
-          <AnimatePresence>
-            {showScrollTop && (
-              <motion.button
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.5 }}
-                onClick={scrollToTop}
-                className="fixed bottom-20 right-8 md:bottom-24 md:right-12 p-2 md:p-3 bg-purple-400/20 
-                         hover:bg-purple-400/30 backdrop-blur-sm rounded-full z-50
-                         transition-colors duration-300"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <ArrowUp className="w-5 h-5 md:w-6 md:h-6 text-purple-400" />
-              </motion.button>
-            )}
-          </AnimatePresence>
-        </ThemeProvider>
+{/* Scroll to Top Button */}
+<AnimatePresence>
+  {showScrollTop && (
+    <motion.button
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.5 }}
+      onClick={scrollToTop}
+      className="fixed bottom-20 right-8 md:bottom-24 md:right-12 p-2 md:p-3 bg-purple-400/20 
+                hover:bg-purple-400/30 backdrop-blur-sm rounded-full z-50
+                transition-colors duration-300"
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
+    >
+      <ArrowUp className="w-5 h-5 md:w-6 md:h-6 text-purple-400" />
+    </motion.button>
+  )}
+</AnimatePresence>
       </body>
     </html>
   );

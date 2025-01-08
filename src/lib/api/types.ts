@@ -48,11 +48,17 @@ export interface Project {
   _id: string;
   title: string;
   description: string;
-  image: string;
+  period: string;
+  image: {
+    url: string;
+    publicId: string;
+  };
   technologies: string[];
-  link: string;
-  github: string;
+  link?: string;
+  github?: string;
   featured: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Organization {
