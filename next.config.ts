@@ -19,7 +19,7 @@ const nextConfig = {
         pathname: '/du6o6c6dc/image/upload/',
       },
     ],
-  },,
+  },
   transpilePackages: ['react-icons', 'framer-motion'],
   reactStrictMode: true,
 };
