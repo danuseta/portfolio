@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, ExternalLink, Github, Image as ImageIcon } from 'lucide-react';
+import { ArrowRight, ExternalLink, Github, Image as ImageIcon, X } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { getProjects } from '@/src/lib/api/services';
@@ -114,9 +114,15 @@ export default function Projects() {
   };
 
   return (
-    <section className="py-12 md:py-20 relative">
-      <SectionBackground variant="blue" density="high" />
-      <div className="container mx-auto px-4 md:px-6">
+    <section className="py-12 md:py-20 relative bg-[#1a191d] overflow-hidden">
+      {/* Background gradients */}
+      <div className="absolute inset-0">
+        <SectionBackground variant="blue" density="high" />
+        <div className="absolute top-0 left-0 w-1/3 h-1/3 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 right-0 w-1/3 h-1/3 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
+      </div>
+
+      <div className="container mx-auto px-4 md:px-6 relative">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -136,7 +142,7 @@ export default function Projects() {
                 key={project._id}
                 variants={itemVariants}
                 className="group relative bg-white/5 backdrop-blur-lg rounded-xl overflow-hidden
-                          hover:bg-white/10 transition-all duration-500 h-full"
+                          hover:bg-white/10 transition-all duration-500 flex flex-col h-full"
               >
                 {/* Project Image/Preview */}
                 <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-purple-500/10 to-blue-500/10">
@@ -154,34 +160,34 @@ export default function Projects() {
                       <motion.button
                         whileHover={{ scale: 1.1 }}
                         onClick={() => setSelectedImage(project.image)}
-                        className="absolute top-2 right-2 md:top-3 md:right-3 p-2 rounded-full bg-black/50 text-white 
-                                 hover:bg-black/70 transition-all z-10"
+                        className="absolute top-2 right-2 p-2 rounded-full bg-black/50 text-white/80 
+                                 hover:text-white hover:bg-black/70 transition-all z-10"
                       >
-                        <ImageIcon className="w-3 h-3 md:w-4 md:h-4" />
+                        <ImageIcon className="w-4 h-4" />
                       </motion.button>
                     </>
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 </div>
 
-                {/* Keep existing content section */}
-                <div className="p-4 md:p-6 relative">
-                  <h3
-                    className="text-lg md:text-xl font-bold mb-2 md:mb-3 text-purple-400 group-hover:text-purple-200
-                               transition-colors tracking-wide line-clamp-1"
-                  >
-                    {project.title}
-                  </h3>
+                {/* Project Content */}
+                <div className="p-4 md:p-6 relative flex flex-col flex-grow">
+                  <div className="flex-grow">
+                    <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3 text-purple-400 group-hover:text-purple-200
+                                transition-colors tracking-wide line-clamp-1">
+                      {project.title}
+                    </h3>
 
-                  <p className="text-gray-300 text-sm md:text-base mb-3 md:mb-4 line-clamp-3 tracking-wide text-justify">
-                    {project.description}
-                  </p>
+                    <p className="text-gray-300 text-sm md:text-base mb-3 md:mb-4 line-clamp-3 tracking-wide text-justify">
+                      {project.description}
+                    </p>
 
-                  <TechStack
-                    technologies={project.technologies}
-                    size="sm"
-                    className="mb-3 md:mb-4 gap-1.5"
-                  />
+                    <TechStack
+                      technologies={project.technologies}
+                      size="sm"
+                      className="mb-3 md:mb-4 gap-1.5"
+                    />
+                  </div>
 
                   <div className="flex items-center justify-between pt-3 md:pt-4 border-t border-purple-500/10">
                     <Link href={project.link || '#'} target="_blank" rel="noopener noreferrer">
@@ -219,11 +225,7 @@ export default function Projects() {
           <motion.div variants={itemVariants} className="flex justify-center">
             <Link href="/projects" className="inline-block">
               <motion.button
-                whileHover={{
-                  scale: 1.02,
-                  x: 5,
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
-                }}
+                whileHover={{ scale: 1.02, x: 5 }}
                 whileTap={{ scale: 0.95 }}
                 className="flex items-center gap-2 text-purple-400 hover:text-purple-300 
                          bg-white/5 backdrop-blur-sm px-6 py-3 rounded-full transition-colors"
@@ -242,7 +244,7 @@ export default function Projects() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 cursor-pointer"
           onClick={() => setSelectedImage(null)}
         >
           <motion.div
@@ -250,8 +252,19 @@ export default function Projects() {
             animate={{ scale: 1 }}
             exit={{ scale: 0.9 }}
             className="relative max-w-4xl w-full max-h-[90vh] rounded-xl overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
           >
+            {/* Close Button */}
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedImage(null);
+              }}
+              className="absolute top-2 right-2 z-10 p-2 rounded-full bg-black/50 text-white/80 hover:text-white hover:bg-black/70 transition-all"
+            >
+              <X className="w-5 h-5" />
+            </motion.button>
+
             <div className="relative w-full h-[80vh]">
               <Image
                 src={selectedImage}
