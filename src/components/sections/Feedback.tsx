@@ -7,6 +7,7 @@ import SectionTitle from '../ui/SectionTitle';
 import SectionBackground from '../ui/SectionBackground';
 import dynamic from 'next/dynamic';
 
+// Dynamically import Turnstile with no SSR to prevent hydration issues
 const Turnstile = dynamic(
   () => import('@marsidev/react-turnstile').then(mod => mod.Turnstile),
   { ssr: false }
@@ -27,14 +28,24 @@ export default function Feedback() {
   const [isVerified, setIsVerified] = useState(false);
   const turnstileRef = useRef(null);
   
+  // Get the site key from environment variables
   const siteKey = process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY || '';
   
+  // Debug environment variables
   useEffect(() => {
-    setIsTurnstileLoaded(!!siteKey);
-    
-    if (!siteKey) {
+    console.log('API URL:', process.env.NEXT_PUBLIC_API_URL || 'Not set');
+    console.log('Turnstile site key exists:', !!siteKey);
+  }, [siteKey]);
+  
+  useEffect(() => {
+    // Only try to load Turnstile if we have a site key
+    if (siteKey && siteKey.length > 10) {
+      setIsTurnstileLoaded(true);
+    } else {
+      // If no site key, consider verification as complete
+      setIsTurnstileLoaded(false);
       setIsVerified(true);
-      console.warn('Cloudflare Turnstile site key is not set. Form will work without CAPTCHA verification.');
+      console.warn('No valid Turnstile site key found. Form will work without CAPTCHA verification.');
     }
   }, [siteKey]);
 
@@ -43,10 +54,13 @@ export default function Feedback() {
       ...prev,
       [e.target.name]: e.target.value
     }));
+    
+    // Clear any previous errors when user is typing
+    if (error) setError('');
   };
 
   const handleTurnstileVerify = (token) => {
-    console.log('Turnstile verified with token:', token.substring(0, 10) + '...');
+    console.log('Turnstile verification successful!');
     setFormData((prev) => ({
       ...prev,
       token
@@ -80,14 +94,16 @@ export default function Feedback() {
     console.log('Token exists:', !!formData.token);
     console.log('Turnstile loaded:', isTurnstileLoaded);
     
-    if (isTurnstileLoaded && !isVerified) {
-      setTurnstileError(true);
-      console.error('Turnstile verification required but not completed');
+    // Check if all required fields are filled
+    if (!formData.name || !formData.email || !formData.message) {
+      setError('Please fill in all required fields');
       return;
     }
     
-    if (!formData.name || !formData.email || !formData.message) {
-      setError('Please fill in all required fields');
+    // Skip verification check if Turnstile isn't loaded
+    if (isTurnstileLoaded && !isVerified) {
+      setTurnstileError(true);
+      setError('Please complete the CAPTCHA verification');
       return;
     }
     
@@ -110,12 +126,19 @@ export default function Feedback() {
       
       console.log('Feedback submission response:', response);
       
+      // Reset form after successful submission
       setSuccess(true);
       setFormData({ name: '', email: '', message: '', token: '' });
       setIsVerified(false);
       
+      // Reset Turnstile if it exists
       if (turnstileRef.current && isTurnstileLoaded) {
-        turnstileRef.current.reset();
+        try {
+          // @ts-ignore
+          turnstileRef.current.reset();
+        } catch (resetError) {
+          console.error('Error resetting Turnstile:', resetError);
+        }
       }
       
       console.log('Feedback submitted successfully');
@@ -127,6 +150,17 @@ export default function Feedback() {
       setLoading(false);
     }
   };
+
+  // Debug button state
+  const isButtonDisabled = loading || (isTurnstileLoaded && !isVerified);
+  useEffect(() => {
+    console.log('Button state:', {
+      loading,
+      isTurnstileLoaded,
+      isVerified,
+      isButtonDisabled
+    });
+  }, [loading, isTurnstileLoaded, isVerified, isButtonDisabled]);
 
   const containerVariants = {
     hidden: {},
@@ -234,7 +268,7 @@ export default function Feedback() {
                   />
                 </div>
 
-                {/* Turnstile Widget - Only render if site key exists */}
+                {/* Turnstile Widget - Only render if site key exists and is valid */}
                 {isTurnstileLoaded && siteKey && (
                   <div className="flex justify-center">
                     <Turnstile
@@ -264,13 +298,13 @@ export default function Feedback() {
                 <div className="flex justify-center pt-2 md:pt-4">
                   <motion.button
                     type="submit"
-                    disabled={loading || (isTurnstileLoaded && !isVerified)}
-                    whileHover={{
+                    disabled={isButtonDisabled}
+                    whileHover={!isButtonDisabled ? {
                       scale: 1.02,
                       x: 5,
                       backgroundColor: 'rgba(255, 255, 255, 0.1)'
-                    }}
-                    whileTap={{ scale: 0.95 }}
+                    } : {}}
+                    whileTap={!isButtonDisabled ? { scale: 0.95 } : {}}
                     className="flex items-center gap-2 text-purple-400 hover:text-purple-300 
                              bg-white/5 backdrop-blur-sm px-6 py-3 rounded-full transition-colors
                              disabled:opacity-50 disabled:cursor-not-allowed"
@@ -294,6 +328,16 @@ export default function Feedback() {
               </form>
             </motion.div>
           </motion.div>
+
+          {/* Status Indicator - For Debugging */}
+          {process.env.NODE_ENV !== 'production' && (
+            <div className="mt-4 text-xs text-gray-400 text-center">
+              Status: {loading ? 'Loading' : 'Ready'} | 
+              Turnstile: {isTurnstileLoaded ? 'Loaded' : 'Not Loaded'} | 
+              Verified: {isVerified ? 'Yes' : 'No'} | 
+              Button: {isButtonDisabled ? 'Disabled' : 'Enabled'}
+            </div>
+          )}
 
           {/* Decorative Elements */}
           <motion.div
