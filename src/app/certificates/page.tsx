@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ExternalLink, Image as ImageIcon, ArrowLeft, Calendar } from 'lucide-react';
+import { ExternalLink, Image as ImageIcon, ArrowLeft, Calendar, X } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { getCertificates } from '@/src/lib/api/services';
@@ -113,9 +113,9 @@ export default function CertificatesPage() {
                           hover:bg-white/10 transition-all duration-700 flex flex-col h-full"
               >
                 {/* Certificate Image/Preview */}
-                <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-purple-500/10 to-blue-500/10">
+                <div className="aspect-video relative overflow-hidden">
                   {certificate.certificateFile && (
-                    <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-purple-500/10 to-blue-500/10">
+                    <>
                       <Image
                         src={certificate.certificateFile.url}
                         alt={certificate.title}
@@ -127,14 +127,14 @@ export default function CertificatesPage() {
                       <motion.button
                         whileHover={{ scale: 1.1 }}
                         onClick={() => setSelectedImage(certificate.certificateFile.url)}
-                        className="absolute top-2 right-2 md:top-3 md:right-3 p-2 rounded-full bg-black/50 text-white 
-                hover:bg-black/70 transition-all z-10"
+                        className="absolute top-2 right-2 p-2 rounded-full bg-black/50 text-white/80 
+                                 hover:text-white hover:bg-black/70 transition-all z-10"
                       >
-                        <ImageIcon className="w-3 h-3 md:w-4 md:h-4" />
+                        <ImageIcon className="w-4 h-4" />
                       </motion.button>
-                    </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                    </>
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 </div>
 
                 {/* Content */}
@@ -216,7 +216,7 @@ export default function CertificatesPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 cursor-pointer"
           onClick={() => setSelectedImage(null)}
         >
           <motion.div
@@ -224,8 +224,19 @@ export default function CertificatesPage() {
             animate={{ scale: 1 }}
             exit={{ scale: 0.9 }}
             className="relative max-w-4xl w-full max-h-[90vh] rounded-xl overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
           >
+            {/* Close Button */}
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedImage(null);
+              }}
+              className="absolute top-2 right-2 z-10 p-2 rounded-full bg-black/50 text-white/80 hover:text-white hover:bg-black/70 transition-all"
+            >
+              <X className="w-5 h-5" />
+            </motion.button>
+
             <div className="relative w-full h-[80vh]">
               <Image
                 src={selectedImage}
