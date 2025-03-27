@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
 import Script from 'next/script';
+import { Analytics } from '@vercel/analytics/react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -52,24 +53,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="theme-color" content="#1a191d" />
 
-        {/* Google Analytics */}
-        <Script
-          strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtag/js?id=G-5PGG1TGNY2"
-        />
-        <Script
-          id="google-analytics"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-5PGG1TGNY2');
-            `,
-          }}
-        />
-
         {/* PWA Icons */}
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/images/icons/icon-192x192.png" />
@@ -79,6 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {!isLoading && !hideNavbar && <Navbar />}
         <div className="overflow-x-hidden">{children}</div>
         {!isLoading && <Footer />}
+        <Analytics />
 
         {/* Scroll to Top Button */}
         <AnimatePresence>

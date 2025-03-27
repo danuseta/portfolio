@@ -123,8 +123,7 @@ export async function submitFeedback(feedbackData: Omit<Feedback, '_id'>): Promi
     console.log('Feedback data:', {
       name: feedbackData.name,
       email: feedbackData.email,
-      messageLength: feedbackData.message?.length || 0,
-      hasToken: !!feedbackData.token
+      messageLength: feedbackData.message?.length || 0
     });
     
     const res = await fetch(url, {
@@ -132,30 +131,34 @@ export async function submitFeedback(feedbackData: Omit<Feedback, '_id'>): Promi
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(feedbackData),
+      body: JSON.stringify({
+        name: feedbackData.name,
+        email: feedbackData.email,
+        message: feedbackData.message
+      }),
       credentials: 'include',
       mode: 'cors'
     });
     
-    const responseText = await res.text();
-    console.log('Response status:', res.status);
-    console.log('Response text length:', responseText.length);
-    
-    if (!res.ok) {
-      try {
-        const errorData = JSON.parse(responseText);
-        throw new Error(errorData.message || `Failed to submit feedback: ${res.statusText}`);
-      } catch (parseError) {
-        throw new Error(`Failed to submit feedback: ${res.statusText || responseText}`);
-      }
-    }
+    let responseData;
+    let responseText = '';
     
     try {
-      return JSON.parse(responseText);
+      responseText = await res.text();
+      responseData = JSON.parse(responseText);
     } catch (parseError) {
-      console.error('Error parsing response JSON:', parseError);
-      throw new Error('Failed to parse feedback response');
+      console.error('Error parsing response:', parseError);
+      throw new Error('Invalid response format from server');
     }
+    
+    console.log('Response status:', res.status);
+    
+    if (!res.ok) {
+      throw new Error(responseData?.message || `Failed to submit feedback: ${res.statusText || 'Unknown error'}`);
+    }
+    
+    return responseData.feedback || responseData;
+    
   } catch (error) {
     console.error('Error submitting feedback:', error);
     throw error;

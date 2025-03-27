@@ -1,228 +1,38 @@
 'use client';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send } from 'lucide-react';
 import { submitFeedback } from '@/src/lib/api/services';
 import SectionTitle from '../ui/SectionTitle';
 import SectionBackground from '../ui/SectionBackground';
-import dynamic from 'next/dynamic';
-
-const Turnstile = dynamic(
-  () => import('@marsidev/react-turnstile').then(mod => mod.Turnstile),
-  { ssr: false }
-);
-
-const isDevelopment = process.env.NODE_ENV === 'development';
 
 export default function Feedback() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: '',
-    token: isDevelopment ? 'dev-bypass-token' : ''
+    message: ''
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
-  const [turnstileError, setTurnstileError] = useState(false);
-  const [isTurnstileLoaded, setIsTurnstileLoaded] = useState(false);
-  const [isVerified, setIsVerified] = useState(isDevelopment);
-  
-  const [turnstileWidgetSuccess, setTurnstileWidgetSuccess] = useState(false);
-  
-  const turnstileRef = useRef(null);
-  const buttonRef = useRef(null);
-  
-  const siteKey = process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY || '';
-  
-  useEffect(() => {
-    if (isDevelopment) return; 
-    
-    const checkForTurnstileSuccess = () => {
-      const successElement = document.querySelector('.cf-turnstile [aria-label="Success"]');
-      if (successElement) {
-        console.log('✅ Turnstile widget success detected visually!');
-        setTurnstileWidgetSuccess(true);
-        setIsVerified(true);
-        if (buttonRef.current) {
-          buttonRef.current.disabled = false;
-          buttonRef.current.classList.remove('opacity-50', 'cursor-not-allowed');
-        }
-      }
-    };
-    
-    checkForTurnstileSuccess();
-    
-    const observer = new MutationObserver(checkForTurnstileSuccess);
-    observer.observe(document.body, { 
-      childList: true, 
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['aria-label', 'class'] 
-    });
-    
-    return () => observer.disconnect();
-  }, [isDevelopment]);
-  
-  useEffect(() => {
-    if (turnstileWidgetSuccess && !isVerified) {
-      console.log('🔄 Forcing state update because widget shows success but state is not verified');
-      setIsVerified(true);
-    }
-  }, [turnstileWidgetSuccess, isVerified]);
-  
-  useEffect(() => {
-    console.log("Aplikasi berjalan dalam mode:", isDevelopment ? "DEVELOPMENT" : "PRODUCTION");
-    console.log("Turnstile siteKey:", siteKey ? "Ditemukan" : "Tidak ditemukan");
-    
-    if (isDevelopment || !siteKey) {
-      console.log("Mode development atau siteKey tidak ada - mengaktifkan form secara otomatis");
-      setIsVerified(true);
-      setIsTurnstileLoaded(false); 
-      
-      setFormData(prev => ({
-        ...prev,
-        token: 'dev-mode-auto-verified-token'
-      }));
-    } else {
-      setIsTurnstileLoaded(!!siteKey);
-    }
-  }, [siteKey]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value
     }));
   };
 
-  const handleTurnstileVerify = (token) => {
-    console.log('Turnstile verified with token:', token.substring(0, 10) + '...');
-    
-    setFormData((prev) => ({
-      ...prev,
-      token
-    }));
-    
-    setIsVerified(true);
-    setTurnstileWidgetSuccess(true);
-    setTurnstileError(false);
-    console.log('Verification completed and state updated');
-    
-    if (buttonRef.current) {
-      setTimeout(() => {
-        buttonRef.current.disabled = false;
-        buttonRef.current.classList.remove('opacity-50', 'cursor-not-allowed');
-        console.log('Button enabled via direct DOM manipulation');
-      }, 100);
-    }
-  };
-
-  const handleTurnstileError = () => {
-    console.error('Turnstile verification error');
-    setTurnstileError(true);
-    setIsVerified(false);
-    setTurnstileWidgetSuccess(false);
-  };
-
-  const handleTurnstileExpire = () => {
-    console.warn('Turnstile verification expired');
-    setFormData((prev) => ({
-      ...prev,
-      token: ''
-    }));
-    setIsVerified(false);
-    setTurnstileWidgetSuccess(false);
-    setTurnstileError(true);
-  };
-
-  const isFormEnabled = () => {
-    console.log('Button status check:');
-    console.log('- Loading:', loading);
-    console.log('- isDevelopment:', isDevelopment);
-    console.log('- turnstileWidgetSuccess:', turnstileWidgetSuccess);
-    console.log('- isVerified:', isVerified);
-    
-    if (isDevelopment) return !loading;
-    
-    return !loading && (
-      !isTurnstileLoaded || 
-      isVerified || 
-      turnstileWidgetSuccess || 
-      document.querySelector('.cf-turnstile [aria-label="Success"]') !== null
-    );
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    
-    console.log('====== FORM SUBMISSION ======');
-    console.log('Mode:', isDevelopment ? 'DEVELOPMENT' : 'PRODUCTION');
-    console.log('Is verified:', isVerified);
-    console.log('Widget success:', turnstileWidgetSuccess);
-    console.log('Token exists:', !!formData.token);
-    
-    const visualSuccess = document.querySelector('.cf-turnstile [aria-label="Success"]') !== null;
-    
-    if (!isDevelopment && isTurnstileLoaded && !isVerified && !turnstileWidgetSuccess && !visualSuccess) {
-      setTurnstileError(true);
-      console.error('Turnstile verification required but not completed');
-      return;
-    }
-    
-    if (!formData.name || !formData.email || !formData.message) {
-      setError('Please fill in all required fields');
-      return;
-    }
-    
     setLoading(true);
 
     try {
-      console.log('Submitting feedback with data:', {
-        name: formData.name,
-        email: formData.email,
-        messageLength: formData.message.length,
-        hasToken: !!formData.token
-      });
-      
-      const effectiveToken = formData.token || (visualSuccess ? 'visual-success-fallback-token' : '') || (isDevelopment ? 'dev-bypass-token' : '');
-      
-      const response = await submitFeedback({
-        name: formData.name,
-        email: formData.email,
-        message: formData.message,
-        token: effectiveToken
-      });
-      
-      console.log('Feedback submission response:', response);
-      
+      await submitFeedback(formData);
       setSuccess(true);
-      setFormData({ 
-        name: '', 
-        email: '', 
-        message: '', 
-        token: isDevelopment ? 'dev-bypass-token' : ''
-      });
-      
-      if (!isDevelopment) {
-        setIsVerified(false);
-        setTurnstileWidgetSuccess(false);
-      }
-      
-      if (turnstileRef.current && isTurnstileLoaded && !isDevelopment) {
-        try {
-          turnstileRef.current.reset();
-        } catch (resetError) {
-          console.warn('Could not reset Turnstile:', resetError);
-        }
-      }
-      
-      console.log('Feedback submitted successfully');
+      setFormData({ name: '', email: '', message: '' });
       setTimeout(() => setSuccess(false), 5000);
     } catch (error) {
       console.error('Error submitting feedback:', error);
-      setError(error.message || 'Failed to submit feedback. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -334,58 +144,19 @@ export default function Feedback() {
                   />
                 </div>
 
-                {/* Turnstile Widget - Only render in production and if site key exists */}
-                {isTurnstileLoaded && siteKey && !isDevelopment && (
-                  <div className="flex justify-center">
-                    <Turnstile
-                      ref={turnstileRef}
-                      siteKey={siteKey}
-                      onVerify={handleTurnstileVerify}
-                      onError={handleTurnstileError}
-                      onExpire={handleTurnstileExpire}
-                      theme="dark"
-                      refreshExpired="auto"
-                    />
-                  </div>
-                )}
-                
-                {/* DEV MODE INDICATOR */}
-                {isDevelopment && (
-                  <div className="text-center text-sm text-amber-400 bg-amber-400/10 rounded-lg p-2 border border-amber-400/30">
-                    🔧 DEVELOPMENT MODE - Turnstile verification bypassed 🔧
-                  </div>
-                )}
-                
-                {turnstileError && isTurnstileLoaded && !isDevelopment && (
-                  <div className="text-center text-sm text-red-400 bg-red-400/10 rounded-lg p-2">
-                    Please complete the CAPTCHA verification
-                  </div>
-                )}
-                
-                {error && (
-                  <div className="text-center text-sm text-red-400 bg-red-400/10 rounded-lg p-2">
-                    {error}
-                  </div>
-                )}
-
                 <div className="flex justify-center pt-2 md:pt-4">
                   <motion.button
-                    ref={buttonRef}
                     type="submit"
-                    disabled={!isFormEnabled()}
+                    disabled={loading}
                     whileHover={{
                       scale: 1.02,
                       x: 5,
                       backgroundColor: 'rgba(255, 255, 255, 0.1)'
                     }}
                     whileTap={{ scale: 0.95 }}
-                    className={`flex items-center gap-2 text-purple-400 hover:text-purple-300 
+                    className="flex items-center gap-2 text-purple-400 hover:text-purple-300 
                              bg-white/5 backdrop-blur-sm px-6 py-3 rounded-full transition-colors
-                             ${!isFormEnabled() ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    onClick={()=> {
-                      console.log("Button clicked");
-                      console.log("Button disabled?", buttonRef.current?.disabled);
-                    }}
+                             disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <span className="font-semibold tracking-wide">
                       {loading ? 'Sending...' : 'Send Feedback'}
@@ -393,16 +164,6 @@ export default function Feedback() {
                     <Send className="w-4 h-4 md:w-5 md:h-5" />
                   </motion.button>
                 </div>
-
-                {/* Debug info */}
-                {isDevelopment && (
-                  <div className="mt-4 p-2 border border-purple-500/20 rounded-lg text-xs text-gray-400">
-                    <p>DEBUG: isVerified: {isVerified ? 'Yes' : 'No'}</p>
-                    <p>DEBUG: turnstileWidgetSuccess: {turnstileWidgetSuccess ? 'Yes' : 'No'}</p>
-                    <p>DEBUG: visual success: {document.querySelector('.cf-turnstile [aria-label="Success"]') !== null ? 'Yes' : 'No'}</p>
-                    <p>DEBUG: form enabled: {isFormEnabled() ? 'Yes' : 'No'}</p>
-                  </div>
-                )}
 
                 {success && (
                   <motion.div
