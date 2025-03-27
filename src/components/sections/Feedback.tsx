@@ -12,36 +12,42 @@ const Turnstile = dynamic(
   { ssr: false }
 );
 
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 export default function Feedback() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     message: '',
-    token: ''
+    token: isDevelopment ? 'dev-bypass-token' : ''
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const [turnstileError, setTurnstileError] = useState(false);
   const [isTurnstileLoaded, setIsTurnstileLoaded] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
+  const [isVerified, setIsVerified] = useState(isDevelopment);
   const turnstileRef = useRef(null);
   
   const siteKey = process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY || '';
   
   useEffect(() => {
-    setIsTurnstileLoaded(!!siteKey);
+    console.log("Aplikasi berjalan dalam mode:", isDevelopment ? "DEVELOPMENT" : "PRODUCTION");
+    console.log("Turnstile siteKey:", siteKey ? "Ditemukan" : "Tidak ditemukan");
     
-    if (!siteKey) {
+    if (isDevelopment || !siteKey) {
+      console.log("Mode development atau siteKey tidak ada - mengaktifkan form secara otomatis");
       setIsVerified(true);
-      console.warn('Cloudflare Turnstile site key is not set. Form will work without CAPTCHA verification.');
+      setIsTurnstileLoaded(false); 
+      
+      setFormData(prev => ({
+        ...prev,
+        token: 'dev-mode-auto-verified-token'
+      }));
+    } else {
+      setIsTurnstileLoaded(!!siteKey);
     }
   }, [siteKey]);
-
-  useEffect(() => {
-    console.log('Verification state changed:', isVerified);
-    console.log('Token updated:', !!formData.token);
-  }, [isVerified, formData.token]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -58,11 +64,9 @@ export default function Feedback() {
       token
     }));
     
-    setTimeout(() => {
-      setIsVerified(true);
-      setTurnstileError(false);
-      console.log('Verification completed and state updated');
-    }, 0);
+    setIsVerified(true);
+    setTurnstileError(false);
+    console.log('Verification completed and state updated');
   };
 
   const handleTurnstileError = () => {
@@ -82,6 +86,8 @@ export default function Feedback() {
   };
 
   const isFormEnabled = () => {
+    if (isDevelopment) return !loading;
+    
     return !loading && (!isTurnstileLoaded || isVerified);
   };
 
@@ -89,12 +95,12 @@ export default function Feedback() {
     e.preventDefault();
     setError('');
     
-    console.log('Form submission attempted');
+    console.log('====== FORM SUBMISSION ======');
+    console.log('Mode:', isDevelopment ? 'DEVELOPMENT' : 'PRODUCTION');
     console.log('Is verified:', isVerified);
     console.log('Token exists:', !!formData.token);
-    console.log('Turnstile loaded:', isTurnstileLoaded);
     
-    if (isTurnstileLoaded && !isVerified) {
+    if (!isDevelopment && isTurnstileLoaded && !isVerified) {
       setTurnstileError(true);
       console.error('Turnstile verification required but not completed');
       return;
@@ -119,17 +125,29 @@ export default function Feedback() {
         name: formData.name,
         email: formData.email,
         message: formData.message,
-        token: formData.token
+        token: formData.token || (isDevelopment ? 'dev-bypass-token' : '')
       });
       
       console.log('Feedback submission response:', response);
       
       setSuccess(true);
-      setFormData({ name: '', email: '', message: '', token: '' });
-      setIsVerified(false);
+      setFormData({ 
+        name: '', 
+        email: '', 
+        message: '', 
+        token: isDevelopment ? 'dev-bypass-token' : '' 
+      });
       
-      if (turnstileRef.current && isTurnstileLoaded) {
-        turnstileRef.current.reset();
+      if (!isDevelopment) {
+        setIsVerified(false);
+      }
+      
+      if (turnstileRef.current && isTurnstileLoaded && !isDevelopment) {
+        try {
+          turnstileRef.current.reset();
+        } catch (resetError) {
+          console.warn('Could not reset Turnstile:', resetError);
+        }
       }
       
       console.log('Feedback submitted successfully');
@@ -248,8 +266,8 @@ export default function Feedback() {
                   />
                 </div>
 
-                {/* Turnstile Widget - Only render if site key exists */}
-                {isTurnstileLoaded && siteKey && (
+                {/* Turnstile Widget - Only render in production and if site key exists */}
+                {isTurnstileLoaded && siteKey && !isDevelopment && (
                   <div className="flex justify-center">
                     <Turnstile
                       ref={turnstileRef}
@@ -263,7 +281,14 @@ export default function Feedback() {
                   </div>
                 )}
                 
-                {turnstileError && isTurnstileLoaded && (
+                {/* DEV MODE INDICATOR */}
+                {isDevelopment && (
+                  <div className="text-center text-sm text-amber-400 bg-amber-400/10 rounded-lg p-2 border border-amber-400/30">
+                    🔧 DEVELOPMENT MODE - Turnstile verification bypassed 🔧
+                  </div>
+                )}
+                
+                {turnstileError && isTurnstileLoaded && !isDevelopment && (
                   <div className="text-center text-sm text-red-400 bg-red-400/10 rounded-lg p-2">
                     Please complete the CAPTCHA verification
                   </div>
@@ -295,16 +320,6 @@ export default function Feedback() {
                     <Send className="w-4 h-4 md:w-5 md:h-5" />
                   </motion.button>
                 </div>
-
-                {/* Debug info for development - can be removed in production */}
-                {process.env.NODE_ENV === 'development' && (
-                  <div className="mt-4 p-2 border border-purple-500/20 rounded-lg text-xs text-gray-400">
-                    <p>Debug: is verified: {isVerified ? 'Yes' : 'No'}</p>
-                    <p>Debug: has token: {!!formData.token ? 'Yes' : 'No'}</p>
-                    <p>Debug: turnstile loaded: {isTurnstileLoaded ? 'Yes' : 'No'}</p>
-                    <p>Debug: form enabled: {isFormEnabled() ? 'Yes' : 'No'}</p>
-                  </div>
-                )}
 
                 {success && (
                   <motion.div
