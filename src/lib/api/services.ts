@@ -8,64 +8,137 @@ import {
   Feedback
 } from './types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+const getApiUrl = (endpoint) => {
+  const baseUrl = API_URL.endsWith('/') ? API_URL : `${API_URL}/`;
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint.substring(1) : endpoint;
+  return `${baseUrl}${cleanEndpoint}`;
+};
 
 export async function getProfile(): Promise<Profile> {
-  const res = await fetch(`${API_URL}api/profile`);
-  if (!res.ok) throw new Error('Failed to fetch profile');
-  return res.json();
+  try {
+    const res = await fetch(getApiUrl('api/profile'));
+    if (!res.ok) throw new Error(`Failed to fetch profile: ${res.statusText}`);
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+    throw error;
+  }
 }
 
 export async function getEducation(): Promise<Education[]> {
-  const res = await fetch(`${API_URL}api/education`);
-  if (!res.ok) throw new Error('Failed to fetch education');
-  return res.json();
+  try {
+    const res = await fetch(getApiUrl('api/education'));
+    if (!res.ok) throw new Error(`Failed to fetch education: ${res.statusText}`);
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching education:', error);
+    throw error;
+  }
 }
 
 export async function getExperience(): Promise<Experience[]> {
-  const res = await fetch(`${API_URL}api/experience`);
-  if (!res.ok) throw new Error('Failed to fetch experience');
-  return res.json();
+  try {
+    const res = await fetch(getApiUrl('api/experience'));
+    if (!res.ok) throw new Error(`Failed to fetch experience: ${res.statusText}`);
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching experience:', error);
+    throw error;
+  }
 }
 
 export async function getProjects(): Promise<Project[]> {
-  const res = await fetch(`${API_URL}api/projects`);
-  if (!res.ok) throw new Error('Failed to fetch projects');
-  return res.json();
+  try {
+    const res = await fetch(getApiUrl('api/projects'));
+    if (!res.ok) throw new Error(`Failed to fetch projects: ${res.statusText}`);
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching projects:', error);
+    throw error;
+  }
 }
 
 export async function getFeaturedProjects(): Promise<Project[]> {
-  const res = await fetch(`${API_URL}api/projects?featured=true`);
-  if (!res.ok) throw new Error('Failed to fetch featured projects');
-  return res.json();
+  try {
+    const res = await fetch(getApiUrl('api/projects?featured=true'));
+    if (!res.ok) throw new Error(`Failed to fetch featured projects: ${res.statusText}`);
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching featured projects:', error);
+    throw error;
+  }
 }
 
 export async function getOrganizations(): Promise<Organization[]> {
-  const res = await fetch(`${API_URL}api/organizations`);
-  if (!res.ok) throw new Error('Failed to fetch organizations');
-  return res.json();
+  try {
+    const res = await fetch(getApiUrl('api/organizations'));
+    if (!res.ok) throw new Error(`Failed to fetch organizations: ${res.statusText}`);
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching organizations:', error);
+    throw error;
+  }
 }
 
 export async function getFeaturedOrganizations(): Promise<Organization[]> {
-  const res = await fetch(`${API_URL}api/organizations?featured=true`);
-  if (!res.ok) throw new Error('Failed to fetch featured organizations');
-  return res.json();
+  try {
+    const res = await fetch(getApiUrl('api/organizations?featured=true'));
+    if (!res.ok) throw new Error(`Failed to fetch featured organizations: ${res.statusText}`);
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching featured organizations:', error);
+    throw error;
+  }
 }
 
 export async function getCertificates(): Promise<Certificate[]> {
-  const res = await fetch(`${API_URL}api/certificates`);
-  if (!res.ok) throw new Error('Failed to fetch certificates');
-  return res.json();
+  try {
+    const res = await fetch(getApiUrl('api/certificates'));
+    if (!res.ok) throw new Error(`Failed to fetch certificates: ${res.statusText}`);
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching certificates:', error);
+    throw error;
+  }
 }
 
 export async function submitFeedback(feedbackData: Omit<Feedback, '_id'>): Promise<Feedback> {
-  const res = await fetch(`${API_URL}api/feedback`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(feedbackData)
-  });
-  if (!res.ok) throw new Error('Failed to submit feedback');
-  return res.json();
+  try {
+    console.log('Submitting feedback to:', getApiUrl('api/feedback'));
+    console.log('Feedback data:', feedbackData);
+    
+    const res = await fetch(getApiUrl('api/feedback'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(feedbackData),
+      credentials: 'include',
+      mode: 'cors'
+    });
+    
+    const responseText = await res.text();
+    console.log('Response status:', res.status);
+    console.log('Response text:', responseText);
+    
+    if (!res.ok) {
+      try {
+        const errorData = JSON.parse(responseText);
+        throw new Error(errorData.message || `Failed to submit feedback: ${res.statusText}`);
+      } catch (parseError) {
+        throw new Error(`Failed to submit feedback: ${res.statusText || responseText}`);
+      }
+    }
+    
+    try {
+      return JSON.parse(responseText);
+    } catch (parseError) {
+      console.error('Error parsing response JSON:', parseError);
+      throw new Error('Failed to parse feedback response');
+    }
+  } catch (error) {
+    console.error('Error submitting feedback:', error);
+    throw error;
+  }
 }

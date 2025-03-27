@@ -21,6 +21,7 @@ export default function Feedback() {
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
   const [turnstileError, setTurnstileError] = useState(false);
   const [isTurnstileLoaded, setIsTurnstileLoaded] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
@@ -37,14 +38,14 @@ export default function Feedback() {
     }
   }, [siteKey]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value
     }));
   };
 
-  const handleTurnstileVerify = (token: string) => {
+  const handleTurnstileVerify = (token) => {
     console.log('Turnstile verified with token:', token.substring(0, 10) + '...');
     setFormData((prev) => ({
       ...prev,
@@ -70,8 +71,9 @@ export default function Feedback() {
     setTurnstileError(true);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     
     console.log('Form submission attempted');
     console.log('Is verified:', isVerified);
@@ -81,6 +83,11 @@ export default function Feedback() {
     if (isTurnstileLoaded && !isVerified) {
       setTurnstileError(true);
       console.error('Turnstile verification required but not completed');
+      return;
+    }
+    
+    if (!formData.name || !formData.email || !formData.message) {
+      setError('Please fill in all required fields');
       return;
     }
     
@@ -94,7 +101,15 @@ export default function Feedback() {
         hasToken: !!formData.token
       });
       
-      await submitFeedback(formData);
+      const response = await submitFeedback({
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
+        token: formData.token
+      });
+      
+      console.log('Feedback submission response:', response);
+      
       setSuccess(true);
       setFormData({ name: '', email: '', message: '', token: '' });
       setIsVerified(false);
@@ -107,6 +122,7 @@ export default function Feedback() {
       setTimeout(() => setSuccess(false), 5000);
     } catch (error) {
       console.error('Error submitting feedback:', error);
+      setError(error.message || 'Failed to submit feedback. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -228,6 +244,7 @@ export default function Feedback() {
                       onError={handleTurnstileError}
                       onExpire={handleTurnstileExpire}
                       theme="dark"
+                      refreshExpired="auto"
                     />
                   </div>
                 )}
@@ -235,6 +252,12 @@ export default function Feedback() {
                 {turnstileError && isTurnstileLoaded && (
                   <div className="text-center text-sm text-red-400 bg-red-400/10 rounded-lg p-2">
                     Please complete the CAPTCHA verification
+                  </div>
+                )}
+                
+                {error && (
+                  <div className="text-center text-sm text-red-400 bg-red-400/10 rounded-lg p-2">
+                    {error}
                   </div>
                 )}
 
