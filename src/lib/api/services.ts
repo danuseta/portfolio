@@ -10,9 +10,21 @@ import {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 const getApiUrl = (endpoint) => {
+  if (!endpoint) {
+    console.error('Endpoint tidak valid (null/undefined)');
+    return `${API_URL}/api`;
+  }
+  
   const baseUrl = API_URL.endsWith('/') ? API_URL : `${API_URL}/`;
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint.substring(1) : endpoint;
-  return `${baseUrl}${cleanEndpoint}`;
+  
+  const fullUrl = `${baseUrl}${cleanEndpoint}`;
+  
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`API URL: ${fullUrl} (endpoint: ${endpoint})`);
+  }
+  
+  return fullUrl;
 };
 
 export async function getProfile(): Promise<Profile> {
@@ -105,10 +117,17 @@ export async function getCertificates(): Promise<Certificate[]> {
 
 export async function submitFeedback(feedbackData: Omit<Feedback, '_id'>): Promise<Feedback> {
   try {
-    console.log('Submitting feedback to:', getApiUrl('api/feedback'));
-    console.log('Feedback data:', feedbackData);
+    const url = getApiUrl('api/feedback');
+    console.log('Submitting feedback to:', url);
     
-    const res = await fetch(getApiUrl('api/feedback'), {
+    console.log('Feedback data:', {
+      name: feedbackData.name,
+      email: feedbackData.email,
+      messageLength: feedbackData.message?.length || 0,
+      hasToken: !!feedbackData.token
+    });
+    
+    const res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -120,7 +139,7 @@ export async function submitFeedback(feedbackData: Omit<Feedback, '_id'>): Promi
     
     const responseText = await res.text();
     console.log('Response status:', res.status);
-    console.log('Response text:', responseText);
+    console.log('Response text length:', responseText.length);
     
     if (!res.ok) {
       try {
