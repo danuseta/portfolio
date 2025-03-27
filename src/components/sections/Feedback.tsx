@@ -7,7 +7,6 @@ import SectionTitle from '../ui/SectionTitle';
 import SectionBackground from '../ui/SectionBackground';
 import dynamic from 'next/dynamic';
 
-// Dynamically import Turnstile with no SSR to prevent hydration issues
 const Turnstile = dynamic(
   () => import('@marsidev/react-turnstile').then(mod => mod.Turnstile),
   { ssr: false }
@@ -24,18 +23,16 @@ export default function Feedback() {
   const [success, setSuccess] = useState(false);
   const [turnstileError, setTurnstileError] = useState(false);
   const [isTurnstileLoaded, setIsTurnstileLoaded] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
   const turnstileRef = useRef(null);
   
-  // Get the site key from environment variables or use a fallback for testing
   const siteKey = process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY || '';
   
-  // Check if the site key exists
   useEffect(() => {
-    // Only set to true if we have a site key
     setIsTurnstileLoaded(!!siteKey);
     
-    // If we don't have a site key, log a warning
     if (!siteKey) {
+      setIsVerified(true);
       console.warn('Cloudflare Turnstile site key is not set. Form will work without CAPTCHA verification.');
     }
   }, [siteKey]);
@@ -48,47 +45,65 @@ export default function Feedback() {
   };
 
   const handleTurnstileVerify = (token: string) => {
+    console.log('Turnstile verified with token:', token.substring(0, 10) + '...');
     setFormData((prev) => ({
       ...prev,
       token
     }));
+    setIsVerified(true);
     setTurnstileError(false);
   };
 
   const handleTurnstileError = () => {
+    console.error('Turnstile verification error');
     setTurnstileError(true);
+    setIsVerified(false);
   };
 
   const handleTurnstileExpire = () => {
+    console.warn('Turnstile verification expired');
     setFormData((prev) => ({
       ...prev,
       token: ''
     }));
+    setIsVerified(false);
     setTurnstileError(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Check if Turnstile token is present (only if Turnstile is loaded)
-    if (isTurnstileLoaded && !formData.token) {
+    console.log('Form submission attempted');
+    console.log('Is verified:', isVerified);
+    console.log('Token exists:', !!formData.token);
+    console.log('Turnstile loaded:', isTurnstileLoaded);
+    
+    if (isTurnstileLoaded && !isVerified) {
       setTurnstileError(true);
+      console.error('Turnstile verification required but not completed');
       return;
     }
     
     setLoading(true);
 
     try {
+      console.log('Submitting feedback with data:', {
+        name: formData.name,
+        email: formData.email,
+        messageLength: formData.message.length,
+        hasToken: !!formData.token
+      });
+      
       await submitFeedback(formData);
       setSuccess(true);
       setFormData({ name: '', email: '', message: '', token: '' });
+      setIsVerified(false);
       
-      // Reset Turnstile widget if it exists
       if (turnstileRef.current && isTurnstileLoaded) {
-        // @ts-ignore - reset method exists on Turnstile reference
         turnstileRef.current.reset();
       }
       
+      console.log('Feedback submitted successfully');
       setTimeout(() => setSuccess(false), 5000);
     } catch (error) {
       console.error('Error submitting feedback:', error);
@@ -226,7 +241,7 @@ export default function Feedback() {
                 <div className="flex justify-center pt-2 md:pt-4">
                   <motion.button
                     type="submit"
-                    disabled={loading || (isTurnstileLoaded && !formData.token)}
+                    disabled={loading || (isTurnstileLoaded && !isVerified)}
                     whileHover={{
                       scale: 1.02,
                       x: 5,
