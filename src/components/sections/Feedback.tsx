@@ -1,19 +1,23 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Send } from 'lucide-react';
 import { submitFeedback } from '@/src/lib/api/services';
 import SectionTitle from '../ui/SectionTitle';
 import SectionBackground from '../ui/SectionBackground';
+import { Turnstile } from '@marsidev/react-turnstile';
 
 export default function Feedback() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    message: '',
+    token: ''
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [turnstileError, setTurnstileError] = useState(false);
+  const turnstileRef = useRef(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
@@ -22,14 +26,48 @@ export default function Feedback() {
     }));
   };
 
+  const handleTurnstileVerify = (token: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      token
+    }));
+    setTurnstileError(false);
+  };
+
+  const handleTurnstileError = () => {
+    setTurnstileError(true);
+  };
+
+  const handleTurnstileExpire = () => {
+    setFormData((prev) => ({
+      ...prev,
+      token: ''
+    }));
+    setTurnstileError(true);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Check if Turnstile token is present
+    if (!formData.token) {
+      setTurnstileError(true);
+      return;
+    }
+    
     setLoading(true);
 
     try {
       await submitFeedback(formData);
       setSuccess(true);
-      setFormData({ name: '', email: '', message: '' });
+      setFormData({ name: '', email: '', message: '', token: '' });
+      
+      // Reset Turnstile widget
+      if (turnstileRef.current) {
+        // @ts-ignore - reset method exists on Turnstile reference
+        turnstileRef.current.reset();
+      }
+      
       setTimeout(() => setSuccess(false), 5000);
     } catch (error) {
       console.error('Error submitting feedback:', error);
@@ -144,10 +182,28 @@ export default function Feedback() {
                   />
                 </div>
 
+                {/* Turnstile Widget */}
+                <div className="flex justify-center">
+                  <Turnstile
+                    ref={turnstileRef}
+                    siteKey={process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY || ''}
+                    onVerify={handleTurnstileVerify}
+                    onError={handleTurnstileError}
+                    onExpire={handleTurnstileExpire}
+                    theme="dark"
+                  />
+                </div>
+                
+                {turnstileError && (
+                  <div className="text-center text-sm text-red-400 bg-red-400/10 rounded-lg p-2">
+                    Please complete the CAPTCHA verification
+                  </div>
+                )}
+
                 <div className="flex justify-center pt-2 md:pt-4">
                   <motion.button
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || !formData.token}
                     whileHover={{
                       scale: 1.02,
                       x: 5,
