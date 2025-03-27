@@ -1,11 +1,17 @@
 'use client';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Send } from 'lucide-react';
 import { submitFeedback } from '@/src/lib/api/services';
 import SectionTitle from '../ui/SectionTitle';
 import SectionBackground from '../ui/SectionBackground';
-import { Turnstile } from '@marsidev/react-turnstile';
+import dynamic from 'next/dynamic';
+
+// Dynamically import Turnstile with no SSR to prevent hydration issues
+const Turnstile = dynamic(
+  () => import('@marsidev/react-turnstile').then(mod => mod.Turnstile),
+  { ssr: false }
+);
 
 export default function Feedback() {
   const [formData, setFormData] = useState({
@@ -17,7 +23,22 @@ export default function Feedback() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [turnstileError, setTurnstileError] = useState(false);
+  const [isTurnstileLoaded, setIsTurnstileLoaded] = useState(false);
   const turnstileRef = useRef(null);
+  
+  // Get the site key from environment variables or use a fallback for testing
+  const siteKey = process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY || '';
+  
+  // Check if the site key exists
+  useEffect(() => {
+    // Only set to true if we have a site key
+    setIsTurnstileLoaded(!!siteKey);
+    
+    // If we don't have a site key, log a warning
+    if (!siteKey) {
+      console.warn('Cloudflare Turnstile site key is not set. Form will work without CAPTCHA verification.');
+    }
+  }, [siteKey]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
@@ -49,8 +70,8 @@ export default function Feedback() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Check if Turnstile token is present
-    if (!formData.token) {
+    // Check if Turnstile token is present (only if Turnstile is loaded)
+    if (isTurnstileLoaded && !formData.token) {
       setTurnstileError(true);
       return;
     }
@@ -62,8 +83,8 @@ export default function Feedback() {
       setSuccess(true);
       setFormData({ name: '', email: '', message: '', token: '' });
       
-      // Reset Turnstile widget
-      if (turnstileRef.current) {
+      // Reset Turnstile widget if it exists
+      if (turnstileRef.current && isTurnstileLoaded) {
         // @ts-ignore - reset method exists on Turnstile reference
         turnstileRef.current.reset();
       }
@@ -182,19 +203,21 @@ export default function Feedback() {
                   />
                 </div>
 
-                {/* Turnstile Widget */}
-                <div className="flex justify-center">
-                  <Turnstile
-                    ref={turnstileRef}
-                    siteKey={process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY || ''}
-                    onVerify={handleTurnstileVerify}
-                    onError={handleTurnstileError}
-                    onExpire={handleTurnstileExpire}
-                    theme="dark"
-                  />
-                </div>
+                {/* Turnstile Widget - Only render if site key exists */}
+                {isTurnstileLoaded && siteKey && (
+                  <div className="flex justify-center">
+                    <Turnstile
+                      ref={turnstileRef}
+                      siteKey={siteKey}
+                      onVerify={handleTurnstileVerify}
+                      onError={handleTurnstileError}
+                      onExpire={handleTurnstileExpire}
+                      theme="dark"
+                    />
+                  </div>
+                )}
                 
-                {turnstileError && (
+                {turnstileError && isTurnstileLoaded && (
                   <div className="text-center text-sm text-red-400 bg-red-400/10 rounded-lg p-2">
                     Please complete the CAPTCHA verification
                   </div>
@@ -203,7 +226,7 @@ export default function Feedback() {
                 <div className="flex justify-center pt-2 md:pt-4">
                   <motion.button
                     type="submit"
-                    disabled={loading || !formData.token}
+                    disabled={loading || (isTurnstileLoaded && !formData.token)}
                     whileHover={{
                       scale: 1.02,
                       x: 5,
