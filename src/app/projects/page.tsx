@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ExternalLink, Github, Image as ImageIcon, ArrowLeft, Info, X } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { getProjects } from '@/src/lib/api/services';
+import { getFeaturedProjects } from '@/src/lib/api/services';
 import type { Project } from '@/src/lib/api/types';
 import TechStack from '@/src/components/ui/TechStack';
 import SectionBackground from '@/src/components/ui/SectionBackground';
@@ -57,7 +57,7 @@ export default function ProjectsPage() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const data = await getProjects();
+        const data = await getFeaturedProjects();
         const sortedProjects = data.sort((a: Project, b: Project) => {
           const dateA = getStartDateFromPeriod(a.period);
           const dateB = getStartDateFromPeriod(b.period);
@@ -162,6 +162,7 @@ export default function ProjectsPage() {
                           alt={project.title}
                           fill
                           unoptimized
+                          loading="lazy"
                           className="object-cover transform group-hover:scale-110 transition-transform duration-500"
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                         />

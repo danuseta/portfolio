@@ -66,7 +66,6 @@ export const socialIcons = {
   behance: FaBehance,
   dribbble: FaDribbble,
 
-  // Tambahan social icons baru
   spotify: FaSpotify,
   vimeo: FaVimeo,
   flickr: FaFlickr,
@@ -77,7 +76,6 @@ export const socialIcons = {
   gitlab: FaGitlab,
   bitbucket: FaBitbucket,
 
-  // Utility icons
   email: Mail,
   phone: Phone,
   website: Globe,

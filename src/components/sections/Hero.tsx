@@ -1,11 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { getProfile } from '@/src/lib/api/services';
 import type { Profile } from '@/src/lib/api/types';
 import { useScrollBlur } from '@/src/hooks/useScrollBlur';
+import ImageWithLoading from '@/src/components/ui/ImageWithLoading';
 
 export default function Hero() {
   const { blur, scrollProgress } = useScrollBlur();
@@ -76,11 +76,12 @@ export default function Hero() {
                 transition={{ delay: 0.5 }}
                 className="relative w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-24 lg:h-24 overflow-hidden hidden md:block"
               >
-                <Image
+                <ImageWithLoading
                   src={profile?.heroImage1?.url || '/assets/profile-small.jpg'}
                   alt={`${profile?.fullName || 'Developer'} Setup`}
                   fill
                   unoptimized
+                  priority
                   className="object-cover brightness-75 rounded-3xl"
                 />
               </motion.div>
@@ -94,11 +95,12 @@ export default function Hero() {
                 transition={{ delay: 0.4 }}
                 className="relative w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-24 lg:h-24 overflow-hidden hidden md:block"
               >
-                <Image
+                <ImageWithLoading
                   src={profile?.heroImage2?.url || '/assets/profile-small.jpg'}
                   alt={profile?.fullName || 'Developer'}
                   fill
                   unoptimized
+                  priority
                   className="object-cover brightness-75 rounded-3xl"
                 />
               </motion.div>

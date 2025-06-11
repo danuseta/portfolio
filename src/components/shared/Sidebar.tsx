@@ -167,10 +167,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const availableSocialLinks =
     profile?.socialLinks
-      .filter((link) => link.isActive)
+      .filter((link) => link.isActive && link.url)
       .map((link) => ({
         platform: link.platform.toLowerCase(),
-        link: link.url
+        link: link.url.startsWith('http://') || link.url.startsWith('https://') || link.url.startsWith('mailto:') 
+          ? link.url 
+          : `https://${link.url}`
       })) || [];
 
   if (profile?.email) {

@@ -121,6 +121,7 @@ export default function CertificatesPage() {
                         alt={certificate.title}
                         fill
                         unoptimized
+                        loading="lazy"
                         className="object-cover transform group-hover:scale-110 transition-transform duration-500"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />

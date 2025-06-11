@@ -37,7 +37,6 @@ export default function Home() {
 
   return (
     <main className="relative">
-      {/* Fixed Background */}
       <div className="fixed inset-0 bg-[#1a191d] z-0">
         <div className="absolute inset-0">
           <div className="absolute top-0 left-0 w-1/3 h-1/3 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
@@ -45,7 +44,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Fixed Hero */}
       <motion.div
         id="home"
         className="fixed inset-0 z-10"
@@ -57,12 +55,9 @@ export default function Home() {
         <Hero />
       </motion.div>
 
-      {/* Content Container */}
       <div className="relative">
-        {/* Spacer for scroll */}
         <div className="h-screen" />
 
-        {/* Content Sections */}
         <motion.div
           className="relative z-20 bg-transparent"
           style={{
@@ -82,10 +77,10 @@ export default function Home() {
                         alt={profile?.fullName || 'Profile Photo'}
                         fill
                         unoptimized
+                        priority
                         className="object-cover rounded-xl"
                       />
                     </div>
-                    {/* Name and Role */}
                     <div className="text-center sm:text-left">
                       <h2 className="text-3xl font-bold text-purple-400 mb-2 tracking-wide">
                         {profile?.fullName}
@@ -97,7 +92,6 @@ export default function Home() {
                     {profile?.shortBio}
                   </p>
 
-                  {/* Buttons Container */}
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <motion.a
                       href={profile?.cvLink || '#'}
@@ -171,17 +165,13 @@ export default function Home() {
               <Projects />
             </section>
 
-            {/* Feedback Section */}
             <section id="feedback" className="mb-2">
               {/* <div className="container mx-auto px-4">
                 <div className="max-w-4xl mx-auto bg-white/5 backdrop-blur-lg rounded-2xl p-8"> */}
               <Feedback />
-              {/* </div>
-              </div> */}
             </section>
           </div>
 
-          {/* Footer Space */}
           <div className="h-16" />
         </motion.div>
       </div>

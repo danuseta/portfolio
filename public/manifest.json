@@ -1,7 +1,7 @@
 {
-    "name": "Danu Seta Portfolio",
-    "short_name": "Portfolio",
-    "description": "Portfolio Muhammad Danu Seta Wiardana",
+    "name": "Muhammad Danu Seta Wiardana - Portfolio",
+    "short_name": "Danu Seta",
+    "description": "Portfolio Muhammad Danu Seta Wiardana - Full Stack Developer, UI/UX Designer, and Software Engineer specializing in modern web development and user experience design.",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#1a191d",
