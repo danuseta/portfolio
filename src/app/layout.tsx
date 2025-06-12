@@ -166,7 +166,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-5PGG1TGNY2');
+            gtag('config', 'G-5PGG1TGNY2', {
+              cookie_domain: 'danuseta.my.id',
+              cookie_flags: 'SameSite=None;Secure'
+            });
           `}
         </Script>
         
