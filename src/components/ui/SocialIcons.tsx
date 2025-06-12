@@ -7,7 +7,6 @@ import {
   Twitter,
   Youtube,
   Twitch,
-  Discord,
   Mail,
   Globe,
   Rss,
@@ -53,7 +52,7 @@ export const socialIcons = {
   tiktok: FaTiktok,
   youtube: Youtube,
   twitch: Twitch,
-  discord: Discord,
+  discord: MessageCircle,
   whatsapp: FaWhatsapp,
   telegram: FaTelegram,
 

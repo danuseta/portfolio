@@ -209,7 +209,7 @@ export default function ProjectsPage() {
                   </div>
 
                   <div className="flex items-center justify-between pt-3 md:pt-4 border-t border-purple-500/10">
-                    {project.link && (
+                    {project.link && project.link !== 'null' && project.link !== '(NULL)' && project.link.trim() !== '' ? (
                       <Link href={project.link} target="_blank" rel="noopener noreferrer">
                         <motion.button
                           whileHover={{ x: 5 }}
@@ -219,9 +219,13 @@ export default function ProjectsPage() {
                           <ExternalLink className="w-3 h-3 md:w-4 md:h-4" />
                         </motion.button>
                       </Link>
+                    ) : (
+                      <span className="text-gray-500 text-sm md:text-base">
+                        No live demo available
+                      </span>
                     )}
 
-                    {project.github && (
+                    {project.github && project.github !== 'null' && project.github !== '(NULL)' && project.github.trim() !== '' && (
                       <Link href={project.github} target="_blank" rel="noopener noreferrer">
                         <motion.button
                           whileHover={{ y: -2 }}
@@ -334,7 +338,7 @@ export default function ProjectsPage() {
               </div>
 
               <div className="flex items-center gap-4">
-                {selectedProject.link && (
+                {selectedProject.link && selectedProject.link !== 'null' && selectedProject.link !== '(NULL)' && selectedProject.link.trim() !== '' ? (
                   <Link href={selectedProject.link} target="_blank" rel="noopener noreferrer">
                     <motion.button
                       whileHover={{ x: 5 }}
@@ -344,9 +348,13 @@ export default function ProjectsPage() {
                       <ExternalLink className="w-4 h-4" />
                     </motion.button>
                   </Link>
+                ) : (
+                  <span className="text-gray-500">
+                    No live demo available
+                  </span>
                 )}
 
-                {selectedProject.github && (
+                {selectedProject.github && selectedProject.github !== 'null' && selectedProject.github !== '(NULL)' && selectedProject.github.trim() !== '' && (
                   <Link href={selectedProject.github} target="_blank" rel="noopener noreferrer">
                     <motion.button
                       whileHover={{ y: -2 }}

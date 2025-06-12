@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, ExternalLink, Github, Image as ImageIcon, X } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { getFeaturedProjects } from '@/src/lib/api/services';
+import { getProjects } from '@/src/lib/api/services';
 import type { Project } from '@/src/lib/api/types';
 import SectionTitle from '@/src/components/ui/SectionTitle';
 import TechStack from '@/src/components/ui/TechStack';
@@ -54,7 +54,7 @@ export default function Projects() {
   useEffect(() => {
     const loadProjects = async () => {
       try {
-        const data = await getFeaturedProjects();
+        const data = await getProjects();
         const sortedProjects = data.sort((a: Project, b: Project) => {
           const dateA = getStartDateFromPeriod(a.period);
           const dateB = getStartDateFromPeriod(b.period);
@@ -194,17 +194,23 @@ export default function Projects() {
                   </div>
 
                   <div className="flex items-center justify-between pt-3 md:pt-4 border-t border-purple-500/10">
-                    <Link href={project.link || '#'} target="_blank" rel="noopener noreferrer">
-                      <motion.button
-                        whileHover={{ x: 5 }}
-                        className="flex items-center gap-1.5 md:gap-2 text-purple-400 hover:text-purple-300 tracking-wide text-sm md:text-base"
-                      >
-                        <span>View Project</span>
-                        <ExternalLink className="w-3 h-3 md:w-4 md:h-4" />
-                      </motion.button>
-                    </Link>
+                    {project.link && project.link !== 'null' && project.link !== '(NULL)' && project.link.trim() !== '' ? (
+                      <Link href={project.link} target="_blank" rel="noopener noreferrer">
+                        <motion.button
+                          whileHover={{ x: 5 }}
+                          className="flex items-center gap-1.5 md:gap-2 text-purple-400 hover:text-purple-300 tracking-wide text-sm md:text-base"
+                        >
+                          <span>View Project</span>
+                          <ExternalLink className="w-3 h-3 md:w-4 md:h-4" />
+                        </motion.button>
+                      </Link>
+                    ) : (
+                      <span className="text-gray-500 text-sm md:text-base">
+                        No live demo available
+                      </span>
+                    )}
 
-                    {project.github && (
+                    {project.github && project.github !== 'null' && project.github !== '(NULL)' && project.github.trim() !== '' && (
                       <Link href={project.github} target="_blank" rel="noopener noreferrer">
                         <motion.button
                           whileHover={{ y: -2 }}
